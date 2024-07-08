@@ -1,3 +1,5 @@
+// TODO: Create a 
+
 import PropTypes from 'prop-types'
 export const ChosenGenres = (props) => {
   
@@ -9,7 +11,7 @@ export const ChosenGenres = (props) => {
 
   return (
     <>
-      <h3>Chosen genres component</h3>
+      <h3>Chosen genres</h3>
     
       {props.chosenGenres.map(htmlifyGenre)}
     </>
@@ -18,5 +20,7 @@ export const ChosenGenres = (props) => {
 };
 
 ChosenGenres.propTypes = {
-  chosenGenres: PropTypes.array
+  chosenGenres: PropTypes.array,
+  setChosenGenres: PropTypes.func,
 };
+
