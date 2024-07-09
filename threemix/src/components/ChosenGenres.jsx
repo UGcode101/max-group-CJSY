@@ -16,7 +16,8 @@ export const ChosenGenres = (props) => {
   );
 
   return (
-    <>
+   props.chosenGenres.length > 0 &&
+      <>
       <h3>Chosen genres</h3>
 
       {props.chosenGenres.map(htmlifyGenre)}
