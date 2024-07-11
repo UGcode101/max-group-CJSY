@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-export const Generate = (props) => {
+export const Generate = ({ chosenGenres }) => {
   return (
-    props.chosenGenres.length > 2 && (
+    chosenGenres.length > 2 && (
       <>
         <button>Generate Playlist</button>
       </>
