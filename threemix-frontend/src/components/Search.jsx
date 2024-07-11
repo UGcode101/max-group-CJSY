@@ -4,17 +4,17 @@ import { useMemo } from "react";
 import { getGenreSeeds } from "../api/SpotifyApi";
 import { useState } from "react";
 
-export const Search = (props) => {
+export const Search = ({ setChosenGenres, chosenGenres }) => {
   const allGenres = useMemo(getGenreSeeds, []);
   const almostAllGenres = useMemo(
-    () => allGenres.filter((g) => !props.chosenGenres.includes(g)),
-    [allGenres, props.chosenGenres]
+    () => allGenres.filter((g) => !chosenGenres.includes(g)),
+    [allGenres, chosenGenres]
   );
   const [searchTerm, setSearchTerm] = useState("");
   const htmlifyOption = (option) => (
     <div>
       <button
-        onClick={() => props.setChosenGenres([...props.chosenGenres, option])}
+        onClick={() => setChosenGenres([...chosenGenres, option])}
       >
         {option}
       </button>
@@ -26,7 +26,7 @@ export const Search = (props) => {
     if (
       !searchTerm ||
       searchTerm.length === 0 ||
-      props.chosenGenres.length > 2
+      chosenGenres.length > 2
     ) {
       return [];
     }

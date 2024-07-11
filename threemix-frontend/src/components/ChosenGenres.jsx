@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-export const ChosenGenres = (props) => {
+export const ChosenGenres = ({ setChosenGenres, chosenGenres }) => {
   const htmlifyGenre = (genre) => (
     <>
       <div>
         {genre}
-        <button
+        <button className="fill"
           onClick={() =>
-            props.setChosenGenres(props.chosenGenres.filter((g) => g !== genre))
+            setChosenGenres(chosenGenres.filter((g) => g !== genre))
           }
         >
           x
@@ -16,11 +16,11 @@ export const ChosenGenres = (props) => {
   );
 
   return (
-   props.chosenGenres.length > 0 &&
+   chosenGenres.length > 0 &&
       <>
       <h3>Chosen genres</h3>
 
-      {props.chosenGenres.map(htmlifyGenre)}
+      {chosenGenres.map(htmlifyGenre)}
     </>
   );
 };
