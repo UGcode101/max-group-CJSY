@@ -1,5 +1,7 @@
 package org.launchcode.threemix.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.launchcode.threemix.json.Profile;
 import org.launchcode.threemix.json.TokenResponse;
 import org.springframework.http.HttpEntity;
@@ -15,14 +17,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
 import java.util.Base64;
+import java.util.Optional;
 
 @RestController
 public class ThreemixController {
     private final String state = "slfpcerbta";
     private final String scope = "user-read-private user-read-email";
-    private final String client_id = "ADD YOURS";
-    private final String client_secret = "ADD YOURS";
+    private final String client_id = "";
+    private final String client_secret = "";
     private final String redirect_uri = "http://localhost:8080/callback";
     private final RestTemplate restTemplate;
 
@@ -51,7 +55,7 @@ public class ThreemixController {
 
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/callback", produces = "application/json")
-    public RedirectView callback(@RequestParam String code, @RequestParam String state) {
+    public void callback(@RequestParam String code, @RequestParam String state, HttpServletResponse response) throws IOException {
         if(!this.state.equals(state)) {
             throw new IllegalStateException();
         }
@@ -69,8 +73,8 @@ public class ThreemixController {
 
         TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
                 TokenResponse.class);
-
-        return new RedirectView("http://localhost:5173");
-
+        Optional.ofNullable(tokenResponse).ifPresent(t ->
+            response.addCookie(new Cookie("accessToken", t.access_token())));
+        response.sendRedirect("http://localhost:5173");
     }
 }
