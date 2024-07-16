@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -24,9 +26,9 @@ import java.util.Optional;
 @RestController
 public class ThreemixController {
     private final String state = "slfpcerbta";
-    private final String scope = "user-read-private user-read-email";
-    private final String client_id = "";
-    private final String client_secret = "";
+    private final String scope = "user-read-private user-read-email playlist-modify-private playlist-modify-public";
+    private final String client_id = "your_client_id"; // Add your client ID here
+    private final String client_secret = "your_client_secret"; // Add your client secret here
     private final String redirect_uri = "http://localhost:8080/callback";
     private final RestTemplate restTemplate;
 
@@ -43,7 +45,6 @@ public class ThreemixController {
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/login")
     public RedirectView login(RedirectAttributes attributes) {
-
         attributes.addAttribute("response_type", "code");
         attributes.addAttribute("client_id", client_id);
         attributes.addAttribute("scope", scope);
@@ -56,8 +57,9 @@ public class ThreemixController {
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/callback", produces = "application/json")
     public void callback(@RequestParam String code, @RequestParam String state, HttpServletResponse response) throws IOException {
-        if(!this.state.equals(state)) {
-            throw new IllegalStateException();
+        if (!this.state.equals(state)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid state parameter");
+            return;
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -69,12 +71,31 @@ public class ThreemixController {
         map.add("redirect_uri", redirect_uri);
         map.add("grant_type", "authorization_code");
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map , headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
-                TokenResponse.class);
-        Optional.ofNullable(tokenResponse).ifPresent(t ->
-            response.addCookie(new Cookie("accessToken", t.access_token())));
-        response.sendRedirect("http://localhost:5173");
+        try {
+            TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
+                    TokenResponse.class);
+            Optional.ofNullable(tokenResponse).ifPresentOrElse(
+                    t -> {
+                        Cookie accessTokenCookie = new Cookie("accessToken", t.access_token());
+                        accessTokenCookie.setHttpOnly(true);
+                        accessTokenCookie.setSecure(true); // Ensure this is set to true in production
+                        response.addCookie(accessTokenCookie);
+                    },
+                    () -> {
+                        try {
+                            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to retrieve access token");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+            response.sendRedirect("http://localhost:5173");
+        } catch (HttpClientErrorException e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: " + e.getMessage());
+        } catch (RestClientException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during token retrieval: " + e.getMessage());
+        }
     }
 }
