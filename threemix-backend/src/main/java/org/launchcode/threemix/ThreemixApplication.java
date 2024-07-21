@@ -13,8 +13,10 @@ public class ThreemixApplication {
 		SpringApplication.run(ThreemixApplication.class, args);
 	}
 
+	/*
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
+	return builder.build();
+	*/
 }
+
