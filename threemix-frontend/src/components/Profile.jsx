@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { isLoggedIn } from "../api/SpotifyApi";
 
 export const Profile = () => {
