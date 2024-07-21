@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+**/src/main/java/org/launchcode/threemix/secret
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/

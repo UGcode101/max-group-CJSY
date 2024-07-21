@@ -4,6 +4,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.launchcode.threemix.json.Profile;
 import org.launchcode.threemix.json.TokenResponse;
+import org.launchcode.threemix.secret.ClientConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,24 +25,17 @@ import java.util.Optional;
 
 @RestController
 public class ThreemixController {
+    //TODO: Generate random state and store with user session. Delete from user session after single use.
     private final String state = "slfpcerbta";
+    //TODO: make sure we need all the requested scopes
     private final String scope = "user-read-private user-read-email";
-    private final String client_id = "";
-    private final String client_secret = "";
+    private final String client_id = ClientConstants.CLIENT_ID;
+    private final String client_secret = ClientConstants.CLIENT_SECRET;
     private final String redirect_uri = "http://localhost:8080/callback";
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-    public ThreemixController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    @CrossOrigin(origins = "*")
-    @GetMapping(value = "/hello", produces = "application/json")
-    public Profile getHello() {
-        return new Profile("userJenn");
-    }
-
-    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/login")
     public RedirectView login(RedirectAttributes attributes) {
 
@@ -53,8 +48,8 @@ public class ThreemixController {
         return new RedirectView("https://accounts.spotify.com/authorize");
     }
 
-    @CrossOrigin(origins = "*")
-    @GetMapping(value = "/callback", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping(value = "/callback")
     public void callback(@RequestParam String code, @RequestParam String state, HttpServletResponse response) throws IOException {
         if(!this.state.equals(state)) {
             throw new IllegalStateException();
@@ -64,12 +59,12 @@ public class ThreemixController {
         headers.add("Authorization", "Basic " +
                 Base64.getEncoder().encodeToString((client_id + ":" + client_secret).getBytes()));
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("code", code);
-        map.add("redirect_uri", redirect_uri);
-        map.add("grant_type", "authorization_code");
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("code", code);
+        body.add("redirect_uri", redirect_uri);
+        body.add("grant_type", "authorization_code");
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map , headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body , headers);
 
         TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
                 TokenResponse.class);
