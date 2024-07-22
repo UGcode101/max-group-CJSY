@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.launchcode.threemix.json.TokenResponse;
 import org.launchcode.threemix.secret.ClientConstants;
+import org.launchcode.threemix.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,13 +38,13 @@ public class ThreemixController {
     private RestTemplate restTemplate;
 
     @Autowired
-    private StateController stateController;
+    private StateService stateService;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/login")
     public RedirectView login(RedirectAttributes attributes, HttpSession session) {
         // Generate a random state using StateController
-        String state = stateController.generateState(session);
+        String state = stateService.generateState(String.valueOf(session));
 
         attributes.addAttribute("response_type", "code");
         attributes.addAttribute("client_id", ClientConstants.CLIENT_ID);
@@ -58,8 +59,7 @@ public class ThreemixController {
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/callback")
     public void callback(@RequestParam String code, @RequestParam String state, HttpServletResponse response, HttpSession session) throws IOException {
-        // Validate the state parameter using StateController
-        if (!stateController.validateState(state, session)) {
+        if (!stateService.validateState(state, String.valueOf(session))) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid state parameter");
             return;
         }
@@ -82,8 +82,6 @@ public class ThreemixController {
             Optional.ofNullable(tokenResponse).ifPresentOrElse(
                     t -> {
                         Cookie accessTokenCookie = new Cookie("accessToken", t.access_token());
-                        // Ensure HttpOnly flag is set
-                        accessTokenCookie.setHttpOnly(true);
                         accessTokenCookie.setSecure(true); // Ensure this is set to true in production
                         response.addCookie(accessTokenCookie);
                     },
