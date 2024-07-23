@@ -8,22 +8,30 @@ import { isLoggedIn } from "../api/SpotifyApi";
 
 export const Threemix = () => {
   const [chosenGenres, setChosenGenres] = useState([]);
-  const loggedInFeatures = (
+  const [playlist, setPlaylist] = useState();
+  const playlistScreen = (
+    <>
+      <Playlist />
+    </>
+  );
+  const chooseGenresScreen = (
     <>
       <Search setChosenGenres={setChosenGenres} chosenGenres={chosenGenres} />
       <ChosenGenres
         setChosenGenres={setChosenGenres}
         chosenGenres={chosenGenres}
       />
-      <Generate chosenGenres={chosenGenres} />
+      <Generate chosenGenres={chosenGenres} setPlaylist={setPlaylist} />
     </>
+  );
+  const loggedInFeatures = (
+    <>{(!!playlist && playlistScreen) || chooseGenresScreen}</>
   );
 
   
   return (
     <>
       {isLoggedIn() && loggedInFeatures}
-      <Playlist />
       <Profile />
     </>
   );
