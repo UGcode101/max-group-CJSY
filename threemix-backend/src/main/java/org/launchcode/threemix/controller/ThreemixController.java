@@ -44,7 +44,7 @@ public class ThreemixController {
     @GetMapping(value = "/login")
     public RedirectView login(RedirectAttributes attributes, HttpSession session) {
         // Generate a random state using StateController
-        String state = stateService.generateState(String.valueOf(session));
+        String state = stateService.generateState(session.getId());
 
         attributes.addAttribute("response_type", "code");
         attributes.addAttribute("client_id", ClientConstants.CLIENT_ID);
@@ -59,7 +59,7 @@ public class ThreemixController {
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/callback")
     public void callback(@RequestParam String code, @RequestParam String state, HttpServletResponse response, HttpSession session) throws IOException {
-        if (!stateService.validateState(state, String.valueOf(session))) {
+        if (!stateService.validateState(session.getId(), state)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid state parameter");
             return;
         }
