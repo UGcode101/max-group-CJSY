@@ -4,7 +4,7 @@ export const Generate = ({ chosenGenres, setPlaylist }) => {
   return (
     chosenGenres.length > 2 && (
       <>
-        <button onClick={()=>setPlaylist(generatePlaylist(chosenGenres))}>Generate Playlist</button>
+        <button onClick={()=>generatePlaylist(chosenGenres, setPlaylist)}>Generate Playlist</button>
       </>
     )
   );

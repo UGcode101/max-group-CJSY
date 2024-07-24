@@ -1,13 +1,12 @@
 package org.launchcode.threemix.controller;
 
+import org.launchcode.threemix.json.TokenResponse;
+import org.launchcode.threemix.service.SessionStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -21,8 +20,11 @@ public class PlaylistExportController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping(value = "/generateTrackList", produces = "application/json")
+    @Autowired
+    private SessionStorage<TokenResponse> tokenStorage;
+
+    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+    @PostMapping(value = "/generateTrackList", produces = "application/json")
     public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
                                                  @RequestParam List<String> chosenGenres) {
         // Placeholder: Simulate fetching blocked artists and songs
@@ -38,6 +40,7 @@ public class PlaylistExportController {
         // Filter out blocked artists and songs
         filterRecommendations(trackRecommendations, blockedList);
 
+        System.out.println(trackRecommendations.keySet());
         return trackRecommendations;
     }
 
@@ -55,7 +58,7 @@ public class PlaylistExportController {
         String url = buildSpotifyRecommendationUrl(chosenGenres);
 
         // Fetch recommendations from Spotify API
-        return restTemplate.getForObject(url, Map.class, entity);
+        return restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
     }
 
     // Method to build the Spotify recommendation URL
