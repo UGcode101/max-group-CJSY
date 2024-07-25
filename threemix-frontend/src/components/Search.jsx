@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useMemo } from "react";
 import { getGenreSeeds } from "../api/SpotifyApi";
 import { useState } from "react";
-import { Profile } from "./Profile";
 
 export const Search = ({ setChosenGenres, chosenGenres }) => {
   const allGenres = useMemo(getGenreSeeds, []);
@@ -13,22 +12,19 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const htmlifyOption = (option) => (
-    <div>
-      <button
-        onClick={() => setChosenGenres([...chosenGenres, option])}
-      >
+    <span>
+      <button onClick={() => {
+        setChosenGenres([...chosenGenres, option]);
+        setSearchTerm("");
+      }}>
         {option}
       </button>
-    </div>
+    </span>
   );
 
   const options = useMemo(() => {
     console.log(searchTerm);
-    if (
-      !searchTerm ||
-      searchTerm.length === 0 ||
-      chosenGenres.length > 2
-    ) {
+    if (!searchTerm || searchTerm.length === 0 || chosenGenres.length > 2) {
       return [];
     }
     if (searchTerm.length === 1) {
@@ -45,7 +41,7 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      {options.slice(0, 9).map(htmlifyOption)}
+      <div className="search-options">{options.slice(0, 9).map(htmlifyOption)}</div>
     </>
   );
 };
