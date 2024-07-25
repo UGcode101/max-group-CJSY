@@ -20,7 +20,7 @@ export const ProfileHeader = () => {
         {profileInfo.display_name}
         <img
           className="profile-pic"
-          src={profileInfo.images[profileInfo.images?.length - 1].url}
+          src={profileInfo.images[profileInfo.images.length - 1]?.url}
         />
       </div>
     </>
