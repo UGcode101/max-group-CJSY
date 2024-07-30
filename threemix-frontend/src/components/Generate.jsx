@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-export const Generate = ({ chosenGenres }) => {
+import { generatePlaylist } from "../api/backendApi";
+export const Generate = ({ chosenGenres, setPlaylist }) => {
   return (
     chosenGenres.length > 2 && (
       <>
-        <button>Generate Playlist</button>
+        <button onClick={()=>generatePlaylist(chosenGenres, setPlaylist)}>Generate Playlist</button>
       </>
     )
   );

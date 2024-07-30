@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.launchcode.threemix.json.TokenResponse;
 import org.launchcode.threemix.secret.ClientConstants;
+import org.launchcode.threemix.service.SessionStorage;
 import org.launchcode.threemix.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -39,6 +40,9 @@ public class ThreemixController {
 
     @Autowired
     private StateService stateService;
+
+    @Autowired
+    private SessionStorage<TokenResponse> tokenStorage;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/login")
@@ -94,6 +98,7 @@ public class ThreemixController {
                     }
             );
             response.sendRedirect("http://localhost:5173");
+            tokenStorage.setValue(session.getId(), tokenResponse);
         } catch (HttpClientErrorException e) {
             logger.severe("Unauthorized: " + e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: " + e.getMessage());
