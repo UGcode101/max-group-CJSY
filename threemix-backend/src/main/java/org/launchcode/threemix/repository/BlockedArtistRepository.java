@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface BlockedArtistRepository extends JpaRepository<BlockedArtist, Long> {
-    List<BlockedArtist> findBlockedArtistsByUser(User user);
+    List<BlockedArtist> findBlockedArtistByUser(User user);
 }

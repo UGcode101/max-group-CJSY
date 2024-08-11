@@ -1,6 +1,7 @@
 package org.launchcode.threemix.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -9,6 +10,12 @@ public class User {
     private Long id;
 
     private String spotifyId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BlockedArtist> blockedArtists;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BlockedSong> blockedSongs;
 
     // Getters and Setters
     public Long getId() {
@@ -25,5 +32,21 @@ public class User {
 
     public void setSpotifyId(String spotifyId) {
         this.spotifyId = spotifyId;
+    }
+
+    public List<BlockedArtist> getBlockedArtists() {
+        return blockedArtists;
+    }
+
+    public void setBlockedArtists(List<BlockedArtist> blockedArtists) {
+        this.blockedArtists = blockedArtists;
+    }
+
+    public List<BlockedSong> getBlockedSongs() {
+        return blockedSongs;
+    }
+
+    public void setBlockedSongs(List<BlockedSong> blockedSongs) {
+        this.blockedSongs = blockedSongs;
     }
 }

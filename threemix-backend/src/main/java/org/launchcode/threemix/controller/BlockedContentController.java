@@ -7,6 +7,7 @@ import org.launchcode.threemix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -16,8 +17,10 @@ public class BlockedContentController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/blockArtist")
-    public BlockedArtist blockArtist(@RequestParam String spotifyId, @RequestParam String artistId) {
+    // POST and GET for blocked artists
+    @PostMapping("/blockedArtist")
+    public BlockedArtist blockArtist(@RequestParam String artistId, HttpSession session) {
+        String spotifyId = (String) session.getAttribute("spotifyId");
         User user = userService.findUserBySpotifyId(spotifyId);
         BlockedArtist blockedArtist = new BlockedArtist();
         blockedArtist.setArtistId(artistId);
@@ -25,8 +28,23 @@ public class BlockedContentController {
         return userService.saveBlockedArtist(blockedArtist);
     }
 
-    @PostMapping("/blockSong")
-    public BlockedSong blockSong(@RequestParam String spotifyId, @RequestParam String songId) {
+    @GetMapping("/blockedArtist")
+    public List<BlockedArtist> getBlockedArtists(HttpSession session) {
+        String spotifyId = (String) session.getAttribute("spotifyId");
+        User user = userService.findUserBySpotifyId(spotifyId);
+        return userService.findBlockedArtistByUser(user);
+    }
+
+    // Deleting a specific blocked artist
+    @DeleteMapping("/blockedArtist/{id}")
+    public void unblockArtist(@PathVariable Long id) {
+        userService.deleteBlockedArtistById(id);
+    }
+
+    // POST and GET for blocked songs
+    @PostMapping("/blockedSong")
+    public BlockedSong blockSong(@RequestParam String songId, HttpSession session) {
+        String spotifyId = (String) session.getAttribute("spotifyId");
         User user = userService.findUserBySpotifyId(spotifyId);
         BlockedSong blockedSong = new BlockedSong();
         blockedSong.setSongId(songId);
@@ -34,29 +52,16 @@ public class BlockedContentController {
         return userService.saveBlockedSong(blockedSong);
     }
 
-    @GetMapping("/blockedArtists")
-    public List<BlockedArtist> getBlockedArtists(@RequestParam String spotifyId) {
-        User user = userService.findUserBySpotifyId(spotifyId);
-        return userService.findBlockedArtistsByUser(user);
-    }
-
-    @GetMapping("/blockedSongs")
-    public List<BlockedSong> getBlockedSongs(@RequestParam String spotifyId) {
+    @GetMapping("/blockedSong")
+    public List<BlockedSong> getBlockedSongs(HttpSession session) {
+        String spotifyId = (String) session.getAttribute("spotifyId");
         User user = userService.findUserBySpotifyId(spotifyId);
         return userService.findBlockedSongsByUser(user);
     }
 
-    @DeleteMapping("/unblockArtist")
-    public void unblockArtist(@RequestParam Long id) {
-        BlockedArtist blockedArtist = new BlockedArtist();
-        blockedArtist.setId(id);
-        userService.deleteBlockedArtist(blockedArtist);
-    }
-
-    @DeleteMapping("/unblockSong")
-    public void unblockSong(@RequestParam Long id) {
-        BlockedSong blockedSong = new BlockedSong();
-        blockedSong.setId(id);
-        userService.deleteBlockedSong(blockedSong);
+    // Deleting a specific blocked song
+    @DeleteMapping("/blockedSong/{id}")
+    public void unblockSong(@PathVariable Long id) {
+        userService.deleteBlockedSongById(id);
     }
 }

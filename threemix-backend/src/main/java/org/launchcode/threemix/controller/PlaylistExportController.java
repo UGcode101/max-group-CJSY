@@ -13,9 +13,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 public class PlaylistExportController {
@@ -33,15 +33,17 @@ public class PlaylistExportController {
     @PostMapping(value = "/generateTrackList", produces = "application/json")
     public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
                                                  @RequestParam List<String> chosenGenres,
-                                                 @RequestParam String spotifyId) {
+                                                 HttpSession session) {
+        // Retrieve the Spotify ID from the session
+        String spotifyId = (String) session.getAttribute("spotifyId");
         User user = userService.findUserBySpotifyId(spotifyId);
 
         // Fetch blocked artists and songs from the database
-        List<String> blockedArtists = userService.findBlockedArtistsByUser(user)
-                .stream().map(BlockedArtist::getArtistId).collect(Collectors.toList());
+        List<String> blockedArtists = userService.findBlockedArtistByUser(user)
+                .stream().map(BlockedArtist::getArtistId).toList();
 
         List<String> blockedSongs = userService.findBlockedSongsByUser(user)
-                .stream().map(BlockedSong::getSongId).collect(Collectors.toList());
+                .stream().map(BlockedSong::getSongId).toList();
 
         // Generate recommendations from Spotify API
         HttpHeaders headers = new HttpHeaders();
@@ -53,7 +55,6 @@ public class PlaylistExportController {
         // Filter out blocked artists and songs
         filterRecommendations(trackRecommendations, blockedArtists, blockedSongs);
 
-        System.out.println(trackRecommendations.keySet());
         return trackRecommendations;
     }
 
@@ -90,7 +91,7 @@ public class PlaylistExportController {
 
                     return !isBlockedArtist && !isBlockedSong;
                 })
-                .collect(Collectors.toList());
+                .toList(); // Using .toList() for simplicity
 
         recommendations.put("tracks", filteredTracks);
     }

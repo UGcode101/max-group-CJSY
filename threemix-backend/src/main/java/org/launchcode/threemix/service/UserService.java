@@ -32,16 +32,16 @@ public class UserService {
     }
 
     // BlockedArtist related methods
-    public List<BlockedArtist> findBlockedArtistsByUser(User user) {
-        return blockedArtistRepository.findBlockedArtistsByUser(user);
+    public List<BlockedArtist> findBlockedArtistByUser(User user) {
+        return blockedArtistRepository.findBlockedArtistByUser(user);
     }
 
     public BlockedArtist saveBlockedArtist(BlockedArtist blockedArtist) {
         return blockedArtistRepository.save(blockedArtist);
     }
 
-    public void deleteBlockedArtist(BlockedArtist blockedArtist) {
-        blockedArtistRepository.delete(blockedArtist);
+    public void deleteBlockedArtistById(Long id) {
+        blockedArtistRepository.deleteById(id);
     }
 
     // BlockedSong related methods
@@ -53,7 +53,7 @@ public class UserService {
         return blockedSongRepository.save(blockedSong);
     }
 
-    public void deleteBlockedSong(BlockedSong blockedSong) {
-        blockedSongRepository.delete(blockedSong);
+    public void deleteBlockedSongById(Long id) {
+        blockedSongRepository.deleteById(id);
     }
 }
