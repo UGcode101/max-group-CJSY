@@ -1,5 +1,3 @@
-import { getToken } from "./SpotifyApi";
-
 export const generatePlaylist = (genres, setPlaylist) => {
   fetch(
     `http://localhost:8080/generateTrackList?chosenGenres=${genres.join(",")}`,

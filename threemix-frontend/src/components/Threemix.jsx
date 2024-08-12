@@ -3,7 +3,6 @@ import { ChosenGenres } from "./ChosenGenres";
 import { Playlist } from "./Playlist";
 import { useState } from "react";
 import { Generate } from "./Generate";
-import { Profile } from "./Profile";
 import { isLoggedIn } from "../api/SpotifyApi";
 
 export const Threemix = () => {
@@ -28,11 +27,9 @@ export const Threemix = () => {
     <>{(!!playlist && playlistScreen) || chooseGenresScreen}</>
   );
 
-  
   return (
     <>
       {isLoggedIn() && loggedInFeatures}
-      <Profile />
     </>
   );
 };
