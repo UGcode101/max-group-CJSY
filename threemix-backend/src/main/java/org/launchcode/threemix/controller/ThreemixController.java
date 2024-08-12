@@ -3,13 +3,17 @@ package org.launchcode.threemix.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.launchcode.threemix.json.SpotifyUser;
 import org.launchcode.threemix.json.TokenResponse;
+import org.launchcode.threemix.model.User;
 import org.launchcode.threemix.secret.ClientConstants;
 import org.launchcode.threemix.service.SessionStorage;
 import org.launchcode.threemix.service.StateService;
+import org.launchcode.threemix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -42,7 +46,10 @@ public class ThreemixController {
     private StateService stateService;
 
     @Autowired
-    private SessionStorage<TokenResponse> tokenStorage;
+    private UserService userService;
+
+    @Autowired
+    private SessionStorage<SpotifyUser> userSessionStorage;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/login")
@@ -88,6 +95,7 @@ public class ThreemixController {
                         Cookie accessTokenCookie = new Cookie("accessToken", t.access_token());
                         accessTokenCookie.setSecure(true); // Ensure this is set to true in production
                         response.addCookie(accessTokenCookie);
+                        userService.createIfNewUser(t.access_token(), session);
                     },
                     () -> {
                         try {
@@ -98,7 +106,6 @@ public class ThreemixController {
                     }
             );
             response.sendRedirect("http://localhost:5173");
-            tokenStorage.setValue(session.getId(), tokenResponse);
         } catch (HttpClientErrorException e) {
             logger.severe("Unauthorized: " + e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: " + e.getMessage());
