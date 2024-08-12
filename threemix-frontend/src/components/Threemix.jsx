@@ -10,7 +10,7 @@ export const Threemix = () => {
   const [playlist, setPlaylist] = useState();
   const playlistScreen = (
     <>
-      <Playlist />
+      <Playlist playlist={playlist} />
     </>
   );
   const chooseGenresScreen = (

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class BlockedContentController {
 
     @Autowired
@@ -43,13 +44,18 @@ public class BlockedContentController {
 
     // POST and GET for blocked songs
     @PostMapping("/blockedSong")
-    public BlockedSong blockSong(@RequestParam String songId, HttpSession session) {
-        String spotifyId = (String) session.getAttribute("spotifyId");
+    public void blockSong(@RequestParam String songId,
+                          @CookieValue("accessToken") String accessToken,
+                          HttpSession session) {
+        String spotifyId = userService.getUserId(accessToken, session);
         User user = userService.findUserBySpotifyId(spotifyId);
-        BlockedSong blockedSong = new BlockedSong();
-        blockedSong.setSongId(songId);
-        blockedSong.setUser(user);
-        return userService.saveBlockedSong(blockedSong);
+        if (user.getBlockedSongs().stream().map(BlockedSong::getSongId).noneMatch(id -> id.equals(songId))) {
+            BlockedSong blockedSong = new BlockedSong();
+            blockedSong.setSongId(songId);
+            blockedSong.setUser(user);
+            user.getBlockedSongs().add(blockedSong);
+            userService.saveUser(user);
+        }
     }
 
     @GetMapping("/blockedSong")

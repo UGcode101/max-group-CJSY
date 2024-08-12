@@ -17,6 +17,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BlockedSong> blockedSongs;
 
+    public User() {}
+
+    public User(String spotifyId) {
+        this.spotifyId = spotifyId;
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;
