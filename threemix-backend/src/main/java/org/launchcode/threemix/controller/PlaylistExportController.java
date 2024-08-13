@@ -38,22 +38,23 @@ public class PlaylistExportController {
         String spotifyId = (String) session.getAttribute("spotifyId");
         User user = userService.findUserBySpotifyId(spotifyId);
 
-        // Fetch blocked artists and songs from the database
         List<String> blockedArtists = userService.findBlockedArtistByUser(user)
                 .stream().map(BlockedArtist::getArtistId).toList();
 
         List<String> blockedSongs = userService.findBlockedSongsByUser(user)
                 .stream().map(BlockedSong::getSongId).toList();
 
-        // Generate recommendations from Spotify API
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         Map<String, Object> trackRecommendations = getRecommendations(chosenGenres, entity);
 
-        // Filter out blocked artists and songs
         filterRecommendations(trackRecommendations, blockedArtists, blockedSongs);
+
+        String playlistId = createPlaylistOnSpotify(spotifyId, "Generated Playlist", entity);
+
+        addTracksToSpotifyPlaylist(playlistId, trackRecommendations, entity);
 
         return trackRecommendations;
     }
@@ -91,8 +92,41 @@ public class PlaylistExportController {
 
                     return !isBlockedArtist && !isBlockedSong;
                 })
-                .toList(); // Using .toList() for simplicity
+                .toList();
 
         recommendations.put("tracks", filteredTracks);
+    }
+
+    private String createPlaylistOnSpotify(String spotifyId, String playlistName, HttpEntity<String> entity) {
+        String url = "https://api.spotify.com/v1/users/" + spotifyId + "/playlists";
+        Map<String, String> requestBody = Map.of("name", playlistName, "description", "Generated playlist", "public", "false");
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, entity.getHeaders());
+
+        try {
+            Map<String, Object> response = restTemplate.postForObject(url, requestEntity, Map.class);
+            return (String) response.get("id"); // Return the playlist ID
+        } catch (Exception e) {
+            System.err.println("Error creating playlist on Spotify: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Method to add tracks to the newly created Spotify playlist
+    private void addTracksToSpotifyPlaylist(String playlistId, Map<String, Object> trackRecommendations, HttpEntity<String> entity) {
+        String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks";
+
+        List<Map<String, Object>> tracks = (List<Map<String, Object>>) trackRecommendations.get("tracks");
+        List<String> trackUris = tracks.stream()
+                .map(track -> "spotify:track:" + track.get("id"))
+                .toList();
+
+        Map<String, List<String>> requestBody = Map.of("uris", trackUris);
+        HttpEntity<Map<String, List<String>>> requestEntity = new HttpEntity<>(requestBody, entity.getHeaders());
+
+        try {
+            restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+        } catch (Exception e) {
+            System.err.println("Error adding tracks to playlist: " + e.getMessage());
+        }
     }
 }
