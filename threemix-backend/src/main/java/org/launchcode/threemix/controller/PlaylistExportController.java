@@ -34,7 +34,6 @@ public class PlaylistExportController {
     public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
                                                  @RequestParam List<String> chosenGenres,
                                                  HttpSession session) {
-        // Retrieve the Spotify ID from the session
         String spotifyId = (String) session.getAttribute("spotifyId");
         User user = userService.findUserBySpotifyId(spotifyId);
 
@@ -59,22 +58,16 @@ public class PlaylistExportController {
         return trackRecommendations;
     }
 
-    // Method to fetch recommendations from Spotify API
     private Map<String, Object> getRecommendations(List<String> chosenGenres, HttpEntity<String> entity) {
-        // Build the Spotify API request URL with chosen genres
         String url = buildSpotifyRecommendationUrl(chosenGenres);
-
-        // Fetch recommendations from Spotify API
         return restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
     }
 
-    // Method to build the Spotify recommendation URL
     private String buildSpotifyRecommendationUrl(List<String> chosenGenres) {
         String genres = String.join(",", chosenGenres);
         return "https://api.spotify.com/v1/recommendations?seed_genres=" + genres;
     }
 
-    // Method to filter out blocked artists and songs
     private void filterRecommendations(Map<String, Object> recommendations, List<String> blockedArtists, List<String> blockedSongs) {
         List<Map<String, Object>> tracks = (List<Map<String, Object>>) recommendations.get("tracks");
 
@@ -99,19 +92,18 @@ public class PlaylistExportController {
 
     private String createPlaylistOnSpotify(String spotifyId, String playlistName, HttpEntity<String> entity) {
         String url = "https://api.spotify.com/v1/users/" + spotifyId + "/playlists";
-        Map<String, String> requestBody = Map.of("name", playlistName, "description", "Generated playlist", "public", "false");
+        Map<String, String> requestBody = Map.of("name", playlistName, "description", "Generated playlist", "public", "true");
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, entity.getHeaders());
 
         try {
             Map<String, Object> response = restTemplate.postForObject(url, requestEntity, Map.class);
-            return (String) response.get("id"); // Return the playlist ID
+            return (String) response.get("id");
         } catch (Exception e) {
             System.err.println("Error creating playlist on Spotify: " + e.getMessage());
             return null;
         }
     }
 
-    // Method to add tracks to the newly created Spotify playlist
     private void addTracksToSpotifyPlaylist(String playlistId, Map<String, Object> trackRecommendations, HttpEntity<String> entity) {
         String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks";
 
