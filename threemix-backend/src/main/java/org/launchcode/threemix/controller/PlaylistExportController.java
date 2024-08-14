@@ -34,7 +34,7 @@ public class PlaylistExportController {
     public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
                                                  @RequestParam List<String> chosenGenres,
                                                  HttpSession session) {
-        String spotifyId = (String) session.getAttribute("spotifyId");
+        String spotifyId = userService.getUserId(accessToken, session);
         User user = userService.findUserBySpotifyId(spotifyId);
 
         List<String> blockedArtists = userService.findBlockedArtistByUser(user)
