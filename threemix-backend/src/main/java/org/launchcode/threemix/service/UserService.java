@@ -1,6 +1,7 @@
 package org.launchcode.threemix.service;
 
 import jakarta.servlet.http.HttpSession;
+import org.launchcode.threemix.api.SpotifyApi;
 import org.launchcode.threemix.json.SpotifyUser;
 import org.launchcode.threemix.model.BlockedArtist;
 import org.launchcode.threemix.model.BlockedSong;
@@ -9,10 +10,6 @@ import org.launchcode.threemix.repository.BlockedArtistRepository;
 import org.launchcode.threemix.repository.BlockedSongRepository;
 import org.launchcode.threemix.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -81,15 +78,8 @@ public class UserService {
     }
 
     private SpotifyUser fetchUserInfo(String accessToken, HttpSession session) {
-        System.out.println("Fetching user info");
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        SpotifyUser user = restTemplate.exchange(
-                "https://api.spotify.com/v1/me",
-                HttpMethod.GET,
-                entity,
-                SpotifyUser.class).getBody();
+        SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
+        SpotifyUser user = api.me();
         if (user == null) {
             throw new RuntimeException("Unable to fetch user id");
         }
