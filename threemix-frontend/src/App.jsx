@@ -13,8 +13,19 @@ function App() {
 
   return (
     <>
+      <div className="grid-container">
+        <div className="grid-item grid-item-1">grid item1</div>
+        <div className="grid-item grid-item-1">grid item 2 </div>
+        <div className="grid-item grid-item-1">grid item 3</div>
+      </div>
+
       <div>
-        <h1>THREEMIX</h1>
+        <h1 className="app-name">THREEMIX</h1>
+      </div>
+      <div>
+        <h3 className="app-tagline">
+          A multi-genre playlist generator created for Spotify
+        </h3>
       </div>
       <Threemix accessToken={accessToken} />
       <ProfileHeader accessToken={accessToken} setAccessToken={setAccessToken} />
