@@ -3,24 +3,18 @@ package org.launchcode.threemix.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.launchcode.threemix.json.SpotifyUser;
+import org.launchcode.threemix.api.SpotifyApi;
 import org.launchcode.threemix.json.TokenResponse;
-import org.launchcode.threemix.model.User;
 import org.launchcode.threemix.secret.ClientConstants;
-import org.launchcode.threemix.service.SessionStorage;
 import org.launchcode.threemix.service.StateService;
 import org.launchcode.threemix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +27,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class ThreemixController {
 
     private static final Logger logger = Logger.getLogger(ThreemixController.class.getName());
@@ -48,10 +43,6 @@ public class ThreemixController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SessionStorage<SpotifyUser> userSessionStorage;
-
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/login")
     public RedirectView login(RedirectAttributes attributes, HttpSession session) {
         // Generate a random state using StateController
@@ -67,7 +58,6 @@ public class ThreemixController {
         return new RedirectView("https://accounts.spotify.com/authorize");
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(value = "/callback")
     public void callback(@RequestParam String code, @RequestParam String state, HttpServletResponse response, HttpSession session) throws IOException {
         if (!stateService.validateState(session.getId(), state)) {
@@ -92,6 +82,7 @@ public class ThreemixController {
                     TokenResponse.class);
             Optional.ofNullable(tokenResponse).ifPresentOrElse(
                     t -> {
+                        session.setAttribute("spotifyApi", new SpotifyApi(restTemplate, t.access_token(), t.refresh_token()));
                         Cookie accessTokenCookie = new Cookie("accessToken", t.access_token());
                         accessTokenCookie.setSecure(true); // Ensure this is set to true in production
                         response.addCookie(accessTokenCookie);
@@ -113,5 +104,14 @@ public class ThreemixController {
             logger.severe("Error during token retrieval: " + e.getMessage());
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error during token retrieval: " + e.getMessage());
         }
+    }
+
+    @PostMapping(value = "/refresh")
+    public void callback(HttpServletResponse response, HttpSession session) throws IOException {
+        SpotifyApi api = SpotifyApi.fromSession(session, null, restTemplate);
+        TokenResponse tokenResponse = api.refresh();
+        Cookie accessTokenCookie = new Cookie("accessToken", tokenResponse.access_token());
+        accessTokenCookie.setSecure(true);
+        response.addCookie(accessTokenCookie);
     }
 }

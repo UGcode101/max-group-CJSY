@@ -23,3 +23,13 @@ export const blockSong = (songId) => {
     .then(console.log)
     .catch((e) => console.log(e));
 }
+
+export const refresh = () => {
+  fetch("http://localhost:8080/refresh", {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((r) => r.json())
+    .then(console.log)
+    .catch((e) => console.log(e));  
+}
