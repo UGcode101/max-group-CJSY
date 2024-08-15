@@ -40,5 +40,14 @@ export const refresh = () => {
     method: "POST",
     credentials: "include",
   })
-    .catch((e) => console.log(e));  
+    .catch((e) => console.log(e));
+}
+
+export const logout = (callback) => {
+  fetch("http://localhost:8080/logout", {
+    method: "POST",
+    credentials: "include",
+  })
+    .then(callback)
+    .catch((e) => console.log(e));
 }
