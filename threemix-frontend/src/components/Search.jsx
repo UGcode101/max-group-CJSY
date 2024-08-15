@@ -1,11 +1,12 @@
 // : Create search component with autocomplete functionality that generates a list of genres from which to choose.
 import PropTypes from "prop-types";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { getGenreSeeds } from "../api/SpotifyApi";
 import { useState } from "react";
 
 export const Search = ({ setChosenGenres, chosenGenres }) => {
-  const allGenres = useMemo(getGenreSeeds, []);
+  const [allGenres, setAllGenres] = useState([]);
+  useEffect(() => getGenreSeeds(setAllGenres), [setAllGenres]);
   const almostAllGenres = useMemo(
     () => allGenres.filter((g) => !chosenGenres.includes(g)),
     [allGenres, chosenGenres]
