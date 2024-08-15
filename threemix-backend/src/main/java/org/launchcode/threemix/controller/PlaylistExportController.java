@@ -1,11 +1,11 @@
 package org.launchcode.threemix.controller;
 
-import org.launchcode.threemix.json.TokenResponse;
+import jakarta.servlet.http.HttpSession;
+import org.launchcode.threemix.api.SpotifyApi;
 import org.launchcode.threemix.model.BlockedArtist;
 import org.launchcode.threemix.model.BlockedSong;
 import org.launchcode.threemix.model.User;
 import org.launchcode.threemix.service.UserService;
-import org.launchcode.threemix.service.SessionStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,9 +13,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class PlaylistExportController {
@@ -26,54 +26,31 @@ public class PlaylistExportController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SessionStorage<TokenResponse> tokenStorage;
-
     @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PostMapping(value = "/generateTrackList", produces = "application/json")
     public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
                                                  @RequestParam List<String> chosenGenres,
                                                  HttpSession session) {
-        // Retrieve the Spotify ID from the session
-        String spotifyId = (String) session.getAttribute("spotifyId");
+        String spotifyId = userService.getUserId(accessToken, session);
         User user = userService.findUserBySpotifyId(spotifyId);
+        SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
+        Map<String, Object> trackRecommendations = (Map<String, Object>) api.recommendations(chosenGenres);
 
-        // Fetch blocked artists and songs from the database
         List<String> blockedArtists = userService.findBlockedArtistByUser(user)
                 .stream().map(BlockedArtist::getArtistId).toList();
 
         List<String> blockedSongs = userService.findBlockedSongsByUser(user)
                 .stream().map(BlockedSong::getSongId).toList();
 
-        // Generate recommendations from Spotify API
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        Map<String, Object> trackRecommendations = getRecommendations(chosenGenres, entity);
-
-        // Filter out blocked artists and songs
         filterRecommendations(trackRecommendations, blockedArtists, blockedSongs);
+
+        String playlistId = createPlaylistOnSpotify(api, spotifyId, "Generated Playlist");
+
+        addTracksToSpotifyPlaylist(api, playlistId, trackRecommendations);
 
         return trackRecommendations;
     }
 
-    // Method to fetch recommendations from Spotify API
-    private Map<String, Object> getRecommendations(List<String> chosenGenres, HttpEntity<String> entity) {
-        // Build the Spotify API request URL with chosen genres
-        String url = buildSpotifyRecommendationUrl(chosenGenres);
-
-        // Fetch recommendations from Spotify API
-        return restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
-    }
-
-    // Method to build the Spotify recommendation URL
-    private String buildSpotifyRecommendationUrl(List<String> chosenGenres) {
-        String genres = String.join(",", chosenGenres);
-        return "https://api.spotify.com/v1/recommendations?seed_genres=" + genres;
-    }
-
-    // Method to filter out blocked artists and songs
     private void filterRecommendations(Map<String, Object> recommendations, List<String> blockedArtists, List<String> blockedSongs) {
         List<Map<String, Object>> tracks = (List<Map<String, Object>>) recommendations.get("tracks");
 
@@ -91,8 +68,29 @@ public class PlaylistExportController {
 
                     return !isBlockedArtist && !isBlockedSong;
                 })
-                .toList(); // Using .toList() for simplicity
+                .toList();
 
         recommendations.put("tracks", filteredTracks);
+    }
+
+    private String createPlaylistOnSpotify(SpotifyApi api, String spotifyId, String playlistName) {
+        try {
+            return api.createPlaylist(spotifyId, playlistName);
+        } catch (Exception e) {
+            System.err.println("Error creating playlist on Spotify: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void addTracksToSpotifyPlaylist(SpotifyApi api, String playlistId, Map<String, Object> trackRecommendations) {
+        List<Map<String, Object>> tracks = (List<Map<String, Object>>) trackRecommendations.get("tracks");
+        List<String> trackUris = tracks.stream()
+                .map(track -> "spotify:track:" + track.get("id"))
+                .toList();
+        try {
+            api.addTracksToPlaylist(playlistId, trackUris);
+        } catch (Exception e) {
+            System.err.println("Error adding tracks to playlist: " + e.getMessage());
+        }
     }
 }
