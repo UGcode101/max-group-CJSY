@@ -32,8 +32,6 @@ export const createPlaylist = (name, description, tracks) => {
       credentials: "include",
     }
   )
-    .then(r => r.json())
-    .then(console.log)
     .catch(e => console.log(e));
 }
 
@@ -42,7 +40,5 @@ export const refresh = () => {
     method: "POST",
     credentials: "include",
   })
-    .then((r) => r.json())
-    .then(console.log)
     .catch((e) => console.log(e));  
 }
