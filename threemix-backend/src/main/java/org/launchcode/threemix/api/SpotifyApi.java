@@ -97,9 +97,9 @@ public class SpotifyApi {
                 Map.class);
     }
 
-    public String createPlaylist(String spotifyId, String playlistName) {
+    public String createPlaylist(String spotifyId, String playlistName, String description) {
         Map<String, String> requestBody =
-                Map.of("name", playlistName, "description", "Generated playlist", "public", "true");
+                Map.of("name", playlistName, "description", description, "public", "true");
         return post("https://api.spotify.com/v1/users/" + spotifyId + "/playlists", requestBody, Map.class)
                 .get("id").toString();
     }
