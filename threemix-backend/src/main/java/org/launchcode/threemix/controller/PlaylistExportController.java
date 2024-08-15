@@ -7,17 +7,14 @@ import org.launchcode.threemix.model.BlockedSong;
 import org.launchcode.threemix.model.User;
 import org.launchcode.threemix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class PlaylistExportController {
 
     @Autowired
@@ -26,7 +23,6 @@ public class PlaylistExportController {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
     @PostMapping(value = "/generateTrackList", produces = "application/json")
     public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
                                                  @RequestParam List<String> chosenGenres,
@@ -43,10 +39,6 @@ public class PlaylistExportController {
                 .stream().map(BlockedSong::getSongId).toList();
 
         filterRecommendations(trackRecommendations, blockedArtists, blockedSongs);
-
-        String playlistId = createPlaylistOnSpotify(api, spotifyId, "Generated Playlist");
-
-        addTracksToSpotifyPlaylist(api, playlistId, trackRecommendations);
 
         return trackRecommendations;
     }
@@ -73,24 +65,21 @@ public class PlaylistExportController {
         recommendations.put("tracks", filteredTracks);
     }
 
-    private String createPlaylistOnSpotify(SpotifyApi api, String spotifyId, String playlistName) {
-        try {
-            return api.createPlaylist(spotifyId, playlistName);
-        } catch (Exception e) {
-            System.err.println("Error creating playlist on Spotify: " + e.getMessage());
-            return null;
-        }
-    }
+    @PostMapping(value = "/exportPlaylist")
+    public void exportPlaylist(@CookieValue("accessToken") String accessToken,
+                               @RequestParam String name,
+                               @RequestParam String description,
+                               @RequestParam List<String> trackIds,
+                               HttpSession session) {
+        System.out.println("Export playlist " + name);
+        String spotifyId = userService.getUserId(accessToken, session);
+        User user = userService.findUserBySpotifyId(spotifyId);
+        SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
 
-    private void addTracksToSpotifyPlaylist(SpotifyApi api, String playlistId, Map<String, Object> trackRecommendations) {
-        List<Map<String, Object>> tracks = (List<Map<String, Object>>) trackRecommendations.get("tracks");
-        List<String> trackUris = tracks.stream()
-                .map(track -> "spotify:track:" + track.get("id"))
+        List<String> trackUris = trackIds.stream()
+                .map(id -> "spotify:track:" + id)
                 .toList();
-        try {
-            api.addTracksToPlaylist(playlistId, trackUris);
-        } catch (Exception e) {
-            System.err.println("Error adding tracks to playlist: " + e.getMessage());
-        }
+        String playlistId = api.createPlaylist(spotifyId, name, description);
+        api.addTracksToPlaylist(playlistId, trackUris);
     }
 }
