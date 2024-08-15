@@ -71,6 +71,7 @@ public class PlaylistExportController {
                                @RequestParam String description,
                                @RequestParam List<String> trackIds,
                                HttpSession session) {
+        System.out.println("Export playlist " + name);
         String spotifyId = userService.getUserId(accessToken, session);
         User user = userService.findUserBySpotifyId(spotifyId);
         SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
