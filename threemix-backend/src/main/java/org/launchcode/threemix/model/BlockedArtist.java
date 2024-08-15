@@ -11,7 +11,7 @@ public class BlockedArtist {
     private String artistId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id") // Ensure this maps correctly to the user table
     private User user;
 
     // Getters and Setters
