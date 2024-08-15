@@ -24,6 +24,19 @@ export const blockSong = (songId) => {
     .catch((e) => console.log(e));
 }
 
+export const createPlaylist = (name, description, tracks) => {
+  fetch(
+    `http://localhost:8080/exportPlaylist?name=${name}&description=${description}&trackIds=${tracks.join(",")}`,
+    {
+      method: "POST",
+      credentials: "include",
+    }
+  )
+    .then(r => r.json())
+    .then(console.log)
+    .catch(e => console.log(e));
+}
+
 export const refresh = () => {
   fetch("http://localhost:8080/refresh", {
     method: "POST",
