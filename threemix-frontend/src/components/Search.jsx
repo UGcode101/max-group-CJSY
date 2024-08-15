@@ -31,7 +31,7 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
       return almostAllGenres.filter((g) => g.startsWith(searchTerm));
     }
     return almostAllGenres.filter((g) => g.includes(searchTerm));
-  }, [almostAllGenres, searchTerm]);
+  }, [almostAllGenres, searchTerm, chosenGenres.length]);
 
   return (
     <>
