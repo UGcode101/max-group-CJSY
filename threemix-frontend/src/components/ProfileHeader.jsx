@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { getCurrentUserProfile, isLoggedIn } from "../api/SpotifyApi";
+import { getCurrentUserProfile } from "../api/SpotifyApi";
+import { logout } from "../api/backendApi";
 
-export const ProfileHeader = () => {
+export const ProfileHeader = ({accessToken, setAccessToken}) => {
   const [profileInfo, setProfileInfo] = useState();
   useEffect(() => {
-    if (isLoggedIn()) {
+    if (accessToken) {
       getCurrentUserProfile(setProfileInfo);
 
     }
-  }, [isLoggedIn(), setProfileInfo])
+  }, [accessToken, setProfileInfo])
 
   const loginLink = (
     <a href="http://localhost:8080/login">Login with Spotify</a>
@@ -22,13 +23,14 @@ export const ProfileHeader = () => {
           className="profile-pic"
           src={profileInfo.images[profileInfo.images.length - 1]?.url}
         />
+        <button onClick={() => { logout(setAccessToken) }}>Log out</button>
       </div>
     </>
   ) : null;
 
   return (
     <>
-      {isLoggedIn() ? profileFragment : loginLink}
+      {accessToken ? profileFragment : loginLink}
     </>
   );
 };

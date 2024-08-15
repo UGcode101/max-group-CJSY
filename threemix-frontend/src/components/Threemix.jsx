@@ -3,9 +3,8 @@ import { ChosenGenres } from "./ChosenGenres";
 import { Playlist } from "./Playlist";
 import { useState } from "react";
 import { Generate } from "./Generate";
-import { isLoggedIn } from "../api/SpotifyApi";
 
-export const Threemix = () => {
+export const Threemix = ({ accessToken }) => {
   const [chosenGenres, setChosenGenres] = useState([]);
   const [playlist, setPlaylist] = useState();
   const playlistScreen = (
@@ -29,7 +28,7 @@ export const Threemix = () => {
 
   return (
     <>
-      {isLoggedIn() && loggedInFeatures}
+      {accessToken && loggedInFeatures}
     </>
   );
 };

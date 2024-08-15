@@ -107,10 +107,18 @@ public class ThreemixController {
     }
 
     @PostMapping(value = "/refresh")
-    public void callback(HttpServletResponse response, HttpSession session) throws IOException {
+    public void refresh(HttpServletResponse response, HttpSession session) throws IOException {
         SpotifyApi api = SpotifyApi.fromSession(session, null, restTemplate);
         TokenResponse tokenResponse = api.refresh();
         Cookie accessTokenCookie = new Cookie("accessToken", tokenResponse.access_token());
+        accessTokenCookie.setSecure(true);
+        response.addCookie(accessTokenCookie);
+    }
+
+    @PostMapping(value = "/logout")
+    public void logout(HttpServletResponse response, HttpSession session) throws IOException {
+        session.invalidate();
+        Cookie accessTokenCookie = new Cookie("accessToken", "");
         accessTokenCookie.setSecure(true);
         response.addCookie(accessTokenCookie);
     }
