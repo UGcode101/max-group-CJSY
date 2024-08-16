@@ -7,7 +7,6 @@ ThreeMix is a web application that allows users to create custom playlists by se
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
 - [License](#license)
 - [Disclaimer](#disclaimer)
 
@@ -48,26 +47,26 @@ ThreeMix is a web application that allows users to create custom playlists by se
 
 3. **Configure Spotify API**
 
-   Update your `application.properties` with your Spotify API credentials:
+ Create a clientConstants class and put the secret in the folder. This folder is not checked in to Github.
 
    ```properties
-   spotify.client.id=your-client-id
-   spotify.client.secret=your-client-secret
-   spotify.redirect.uri=http://localhost:8080/callback
+package org.launchcode.threemix.secret;
+
+public class ClientConstants {
+public static final String CLIENT_ID = "";
+public static final String CLIENT_SECRET = "";
+}
    ```
 
 4. **Build and Run the Application**
 
    Use Gradle to build and run the application:
 
-   ```bash
-   ./gradlew build
-   ./gradlew bootRun
-   ```
+ Open terminal and do `npm run dev`.
 
 5. **Access the Application**
 
-   Open your browser and navigate to `http://localhost:8080` to access the ThreeMix application.
+   Open your browser and navigate to `http://localhost:5173` to access the ThreeMix application.
 
 ## Usage
 
@@ -82,21 +81,10 @@ ThreeMix is a web application that allows users to create custom playlists by se
 ## Technologies Used
 
 - **Java & Spring Boot**: Backend framework
-- **Thymeleaf**: Templating engine
 - **MySQL**: Database
 - **Spotify Web API**: Integration with Spotify
 - **React**: Frontend framework (if applicable)
 - **Grid: CSS**: Layout and design
-
-## Contributing
-
-Contributions are welcome! Please follow these steps to contribute:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes and commit them (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a new Pull Request.
 
 ## License
 
