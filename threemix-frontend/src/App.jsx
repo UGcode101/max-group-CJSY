@@ -23,14 +23,6 @@ function App() {
           </div>
         </div>
 
-        {/* <div>
-        <h1 className="app-name">THREEMIX</h1>
-      </div>
-      <div>
-        <h3 className="app-tagline">
-          A multi-genre playlist generator created for Spotify
-        </h3>
-      </div> */}
         <Threemix accessToken={accessToken} />
         <ProfileHeader
           accessToken={accessToken}
