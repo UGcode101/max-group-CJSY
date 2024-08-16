@@ -19,7 +19,7 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
   );
   
   const dropdown = (
-    <div className="dropdown" id="dd">
+    <div className="dropdown" onMouseDown={(e) => e.preventDefault()}>
       <button>Profile</button>
       <button
         className="logout-button"
@@ -44,7 +44,9 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
               `https://ui-avatars.com/api/?name=${profileInfo.display_name}&background=ff00d2&color=fff`
             }
             role="button"
-            onClick={() => setDropdownVisible(!dropdownVisible)}
+            onClick={() => setDropdownVisible(true)}
+            onBlur={() => setDropdownVisible(false)}
+            tabIndex="0"
           />
         </div>
         {dropdownVisible && dropdown}

@@ -1,11 +1,12 @@
 // : Create search component with autocomplete functionality that generates a list of genres from which to choose.
 import PropTypes from "prop-types";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { getGenreSeeds } from "../api/SpotifyApi";
 import { useState } from "react";
 
 export const Search = ({ setChosenGenres, chosenGenres }) => {
   const [allGenres, setAllGenres] = useState([]);
+  const searchRef = useRef();
   useEffect(() => getGenreSeeds(setAllGenres), [setAllGenres]);
   const almostAllGenres = useMemo(
     () => allGenres.filter((g) => !chosenGenres.includes(g)),
@@ -17,6 +18,7 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
       <button onClick={() => {
         setChosenGenres([...chosenGenres, option]);
         setSearchTerm("");
+        searchRef?.current?.focus();
       }}>
         {option}
       </button>
@@ -40,9 +42,10 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
       <div className="search">
         <label>Find a genre: </label>
         <input
-          type="search"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+            type="search"
+            ref={searchRef}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
       <div className="search-options">
