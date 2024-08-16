@@ -4,6 +4,7 @@ import { logout } from "../api/backendApi";
 
 export const ProfileHeader = ({accessToken, setAccessToken}) => {
   const [profileInfo, setProfileInfo] = useState();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   useEffect(() => {
     if (accessToken) {
       getCurrentUserProfile(setProfileInfo);
@@ -12,21 +13,45 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
   }, [accessToken, setProfileInfo])
 
   const loginLink = (
-    <a href="http://localhost:8080/login">Login with Spotify</a>
+    <div className="login">
+      <a href="http://localhost:8080/login">Login with Spotify</a>
+    </div>
   );
   
-  const profileFragment = profileInfo && profileInfo.images ? (
-    <>
-      <div className="profile-header">
-        {profileInfo.display_name}
-        <img
-          className="profile-pic"
-          src={profileInfo.images[profileInfo.images.length - 1]?.url}
-        />
-        <button onClick={() => { logout(setAccessToken) }}>Log out</button>
-      </div>
-    </>
-  ) : null;
+  const dropdown = (
+    <div className="dropdown" onMouseDown={(e) => e.preventDefault()}>
+      <button>Profile</button>
+      <button
+        className="logout-button"
+        onClick={() => {
+          logout(setAccessToken);
+        }}
+      >
+        Log out
+      </button>
+    </div>
+  );
+
+  const profileFragment =
+    profileInfo && profileInfo.images ? (
+      <>
+        <div className="profile-header">{profileInfo.display_name}</div>
+        <div className="profile-pic">
+          <img
+            className="circle-pic"
+            src={
+              profileInfo.images[profileInfo.images.length - 1]?.url ??
+              `https://ui-avatars.com/api/?name=${profileInfo.display_name}&background=ff00d2&color=fff`
+            }
+            role="button"
+            onClick={() => setDropdownVisible(true)}
+            onBlur={() => setDropdownVisible(false)}
+            tabIndex="0"
+          />
+        </div>
+        {dropdownVisible && dropdown}
+      </>
+    ) : null;
 
   return (
     <>

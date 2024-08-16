@@ -13,11 +13,22 @@ function App() {
 
   return (
     <>
-      <div>
-        <h1>THREEMIX</h1>
+      <div className="grid-container">
+        <div className="app-name-container">
+          <div className="app-name">
+            <h1>THREEMIX</h1>
+          </div>
+          <div className="app-tagline">
+            <h3>A multi-genre playlist generator created for Spotify</h3>
+          </div>
+        </div>
+
+        <Threemix accessToken={accessToken} />
+        <ProfileHeader
+          accessToken={accessToken}
+          setAccessToken={setAccessToken}
+        />
       </div>
-      <Threemix accessToken={accessToken} />
-      <ProfileHeader accessToken={accessToken} setAccessToken={setAccessToken} />
     </>
   );
 }

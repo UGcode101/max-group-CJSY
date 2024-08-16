@@ -16,12 +16,15 @@ export const ChosenGenres = ({ setChosenGenres, chosenGenres }) => {
   );
 
   return (
-   chosenGenres.length > 0 &&
+    chosenGenres.length > 0 && (
       <>
-      <h3>Chosen genres</h3>
+        <div className="chosen-genres">
+          <h3>Chosen genres</h3>
 
-      {chosenGenres.map(htmlifyGenre)}
-    </>
+          {chosenGenres.map(htmlifyGenre)}
+        </div>
+      </>
+    )
   );
 };
 
