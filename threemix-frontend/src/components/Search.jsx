@@ -35,15 +35,21 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
   }, [almostAllGenres, searchTerm, chosenGenres.length]);
 
   return (
+    chosenGenres.length < 3 && (
     <>
-      <label>Find a genre: </label>
-      <input
-        type="search"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <div className="search-options">{options.slice(0, 9).map(htmlifyOption)}</div>
-    </>
+      <div className="search">
+        <label>Find a genre: </label>
+        <input
+          type="search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      <div className="search-options">
+        {options.slice(0, 9).map(htmlifyOption)}
+      </div>
+      </>
+    )
   );
 };
 

@@ -86,10 +86,12 @@ button:focus-visible {
   color: #a972cb;
 } */
 
-.profile-header {
+/* .profile-header {
   position: absolute;
   top: 10%;
   right: 10%;
+  display: grid;
+  grid-column: 10/13;
   font-weight: bold;
  }
 
@@ -97,18 +99,9 @@ button:focus-visible {
   border-radius: 50%;
   width: 66px;
   margin-left: 15px;
-}
+} */
 
-.search-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-row: 1fr 1fr;
-  /* margin: auto; */
-  justify-items: center;
-  align-items: center;
-  /* max-width: 40%; */
-  gap: 2px;
-}
+
 
 /* trying font stuff */
 @use postcss-preset-env {
@@ -147,12 +140,123 @@ h1 {
   padding: calc(--stroke-width / 2);
   -webkit-text-stroke-color: transparent;
   -webkit-text-stroke-width: var(--stroke-width);
+  margin: 0;
+}
+
+h3 {
+  margin: 0;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  width: 66px;
+  /* margin-left: 15px; */
 }
 
 /* GRID STUFF */
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr, 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  height: 90vh;
+  /* width: 90%; */
+  gap: 10px;
+  /* margin:20px auto; */
+ }
+
+.app-name-container {
+display: grid;
+  grid-column: 3 / 11;
+  grid-row: 2/3;
+}
+
+
+
+/* .app-name {
+  display: grid;
+  grid-column: 3 / 11;
+  grid-row: 2/3;
+  justify-items: center;
+  align-items: center;
+} */
+
+.app-tagline {
+  margin-top: -30px;
+}
+
+.profile-header {
+  /* position: absolute;
+  top: 10%;
+  right: 10%; */
+  display: grid;
+  grid-column: 8/13;
+  grid-row: 1/2;
+  font-weight: bold;
+}
+
+.profile-pic {
+  display: grid;
+  grid-column: 11/12;
+  grid-row: 1/2;
+
+  /* margin-left: 15px; */
+}
+
+.logout-button {
+  display: grid;
+  grid-column: 12/13;
+  grid-row: 1/2;
+
+  /* margin-left: 15px; */
+}
+
+.search {
+  display: inline;
+  grid-column: 4 / 9;
+  grid-row: 3/4;
+  margin-top: 20px;
+}
+
+.search-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-row: 1fr 1fr;
+  grid-column: 4/9;
+  grid-row: 5/6;
+  /* margin: auto; */
+  justify-items: center;
+  align-items: center;
+  /* max-width: 40%; */
+  gap: 2px;
+}
+
+.chosen-genres {
+  display: grid;
+  grid-column: 9/13;
+  grid-row: 3/6;
+}
+
+.generate-button {
+  display: grid;
+  grid-column: 6/8;
+  grid-row: 3/4;
+  margin-top: 20px;
+}
+
+.circle-pic {
+  border-radius: 50%;
+  width: 66px;
+}
+
+.dropdown {
+   grid-column: 11/12;
+   grid-row: 1/2;
+}
+
+.login {
+grid-column: 6/8;
+  grid-row: 3/4;
+  margin-top: 20px;
+  
 }
