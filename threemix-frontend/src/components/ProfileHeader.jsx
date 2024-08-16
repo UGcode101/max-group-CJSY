@@ -55,7 +55,7 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
 
   return (
     <>
-      {accessToken ? profileFragment : loginLink}
+      { profileFragment || !accessToken && loginLink}
     </>
   );
 };

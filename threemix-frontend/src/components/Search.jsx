@@ -26,7 +26,6 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
   );
 
   const options = useMemo(() => {
-    console.log(searchTerm);
     if (!searchTerm || searchTerm.length === 0 || chosenGenres.length > 2) {
       return [];
     }

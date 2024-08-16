@@ -1,5 +1,4 @@
-export const generatePlaylist = (genres, setPlaylist) => {
-  fetch(
+export const generatePlaylist = (genres, setPlaylist) => fetch(
     `http://localhost:8080/generateTrackList?chosenGenres=${genres.join(",")}`,
     {
       method: "POST",
@@ -9,10 +8,8 @@ export const generatePlaylist = (genres, setPlaylist) => {
     .then(r => r.json())
     .then(setPlaylist)
     .catch((e) => console.log(e));
-};
 
-export const blockSong = (songId) => {
-  fetch(
+export const blockSong = (songId) => fetch(
     `http://localhost:8080/api/blockedSong?songId=${songId}`,
     {
       method: "POST",
@@ -22,10 +19,8 @@ export const blockSong = (songId) => {
     .then((r) => r.json())
     .then(console.log)
     .catch((e) => console.log(e));
-}
 
-export const createPlaylist = (name, description, tracks) => {
-  fetch(
+export const createPlaylist = (name, description, tracks) => fetch(
     `http://localhost:8080/exportPlaylist?name=${name}&description=${description}&trackIds=${tracks.join(",")}`,
     {
       method: "POST",
@@ -33,21 +28,16 @@ export const createPlaylist = (name, description, tracks) => {
     }
   )
     .catch(e => console.log(e));
-}
 
-export const refresh = () => {
-  fetch("http://localhost:8080/refresh", {
-    method: "POST",
-    credentials: "include",
-  })
-    .catch((e) => console.log(e));
-}
+export const refresh = () => fetch("http://localhost:8080/refresh", {
+  method: "POST",
+  credentials: "include",
+})
+  .catch((e) => console.log(e));
 
-export const logout = (callback) => {
-  fetch("http://localhost:8080/logout", {
+export const logout = (callback) => fetch("http://localhost:8080/logout", {
     method: "POST",
     credentials: "include",
   })
     .then(callback)
     .catch((e) => console.log(e));
-}
