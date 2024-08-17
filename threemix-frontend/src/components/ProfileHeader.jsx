@@ -33,14 +33,14 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
   );
 
   const profileFragment =
-    profileInfo && profileInfo.images ? (
+    profileInfo && (
       <>
         <div className="profile-header">{profileInfo.display_name}</div>
         <div className="profile-pic">
           <img
             className="circle-pic"
             src={
-              profileInfo.images[profileInfo.images.length - 1]?.url ??
+              profileInfo.images?.[profileInfo.images?.length - 1]?.url ??
               `https://ui-avatars.com/api/?name=${profileInfo.display_name}&background=ff00d2&color=fff`
             }
             role="button"
@@ -51,7 +51,7 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
         </div>
         {dropdownVisible && dropdown}
       </>
-    ) : null;
+    );
 
   return (
     <>
