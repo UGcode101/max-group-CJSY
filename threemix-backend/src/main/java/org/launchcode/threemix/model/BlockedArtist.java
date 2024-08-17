@@ -11,7 +11,6 @@ public class BlockedArtist {
     private String artistId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     // Getters and Setters

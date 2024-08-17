@@ -20,13 +20,18 @@ public class BlockedContentController {
 
     // POST and GET for blocked artists
     @PostMapping("/blockedArtist")
-    public BlockedArtist blockArtist(@RequestParam String artistId, HttpSession session) {
-        String spotifyId = (String) session.getAttribute("spotifyId");
+    public void blockArtist(@RequestParam String artistId,
+                            @CookieValue("accessToken") String accessToken,
+                            HttpSession session) {
+        String spotifyId = userService.getUserId(accessToken, session);
         User user = userService.findUserBySpotifyId(spotifyId);
-        BlockedArtist blockedArtist = new BlockedArtist();
-        blockedArtist.setArtistId(artistId);
-        blockedArtist.setUser(user);
-        return userService.saveBlockedArtist(blockedArtist);
+        if (user.getBlockedArtists().stream().map(BlockedArtist::getArtistId).noneMatch(id -> id.equals(artistId))) {
+            BlockedArtist blockedArtist = new BlockedArtist();
+            blockedArtist.setArtistId(artistId);
+            blockedArtist.setUser(user);
+            user.getBlockedArtists().add(blockedArtist);
+            userService.saveUser(user);
+        }
     }
 
     @GetMapping("/blockedArtist")
