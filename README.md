@@ -47,24 +47,24 @@ ThreeMix is a web application that allows users to create custom playlists by se
 
 3. **Configure Spotify API**
 
- Create a ClientConstants class and put the secret in the folder. This folder is not checked in to Github.
+   Create a ClientConstants class and put the secret in the folder. This folder is not checked in to Github.
 
    ```properties
-package org.launchcode.threemix.secret;
+   package org.launchcode.threemix.secret;
 
-    public class ClientConstants {
-    public static final String CLIENT_ID = "";
-public static final String CLIENT_SECRET = "";
-}
+   public class ClientConstants {
+      public static final String CLIENT_ID = "";
+      public static final String CLIENT_SECRET = "";
+   }
    ```
 
 4. **Build and Run the Application**
 
    Use Gradle to build and run the application:
  
-Use bootRun
+   Use bootRun
 
- Open terminal and do `npm run dev`.
+   Open terminal and do `npm run dev`.
 
 5. **Access the Application**
 
