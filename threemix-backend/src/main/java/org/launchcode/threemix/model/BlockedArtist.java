@@ -8,11 +8,15 @@ public class BlockedArtist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String artistId;
-
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "spotify_id", referencedColumnName = "spotifyId")
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "blocked_artist_stats_id", referencedColumnName = "id")
+    private BlockedArtistStats blockedArtistStats;
+
+    private String artistId;  // This field was missing
 
     // Getters and Setters
     public Long getId() {
@@ -23,19 +27,27 @@ public class BlockedArtist {
         this.id = id;
     }
 
-    public String getArtistId() {
-        return artistId;
-    }
-
-    public void setArtistId(String artistId) {
-        this.artistId = artistId;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public BlockedArtistStats getBlockedArtistStats() {
+        return blockedArtistStats;
+    }
+
+    public void setBlockedArtistStats(BlockedArtistStats blockedArtistStats) {
+        this.blockedArtistStats = blockedArtistStats;
+    }
+
+    public String getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(String artistId) {
+        this.artistId = artistId;
     }
 }
