@@ -1,17 +1,20 @@
 import { Search } from "./Search";
 import { ChosenGenres } from "./ChosenGenres";
-import { Playlist } from "./Playlist";
-import { useContext, useState } from "react";
+import { Tracklist } from "./Tracklist";
+import { useContext, useEffect, useState } from "react";
 import { Generate } from "./Generate";
 import { AuthContext } from "../App";
 
-export const Threemix = () => {
+export const Threemix = ({ accessToken, setShowTracklistPage }) => {
   const [chosenGenres, setChosenGenres] = useState([]);
-  const [playlist, setPlaylist] = useState();
+  const [tracklist, setTracklist] = useState();
   const auth = useContext(AuthContext);
-  const playlistScreen = (
+  useEffect(() => {
+    setShowTracklistPage(!!tracklist);
+  }, [tracklist, setShowTracklistPage])
+  const tracklistScreen = (
     <>
-      <Playlist playlist={playlist} />
+      <Tracklist tracklist={tracklist} />
     </>
   );
   const chooseGenresScreen = (
@@ -21,11 +24,11 @@ export const Threemix = () => {
         setChosenGenres={setChosenGenres}
         chosenGenres={chosenGenres}
       />
-      <Generate chosenGenres={chosenGenres} setPlaylist={setPlaylist} />
+      <Generate chosenGenres={chosenGenres} setTracklist={setTracklist} />
     </>
   );
   const loggedInFeatures = (
-    <>{(!!playlist && playlistScreen) || chooseGenresScreen}</>
+    <>{(!!tracklist && tracklistScreen) || chooseGenresScreen}</>
   );
 
   return (

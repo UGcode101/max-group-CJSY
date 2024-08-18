@@ -46,7 +46,7 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
             type="search"
             ref={searchRef}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
         />
       </div>
       <div className="search-options">

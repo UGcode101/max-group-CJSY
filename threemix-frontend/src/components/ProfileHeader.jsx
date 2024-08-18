@@ -9,7 +9,7 @@ export const ProfileHeader = ({setShowProfilePage}) => {
   const auth = useContext(AuthContext);
   useEffect(() => {
     if (auth.accessToken) {
-      getCurrentUserProfile(auth, setProfileInfo);
+     getCurrentUserProfile(auth, setProfileInfo);
 
     }
   }, [setProfileInfo, auth])
