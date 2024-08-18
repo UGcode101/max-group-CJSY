@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getCurrentUserProfile } from "../api/SpotifyApi";
 import { logout } from "../api/backendApi";
 
-export const ProfileHeader = ({accessToken, setAccessToken}) => {
+export const ProfileHeader = ({accessToken, setAccessToken, setShowProfilePage}) => {
   const [profileInfo, setProfileInfo] = useState();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   useEffect(() => {
@@ -20,7 +20,7 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
   
   const dropdown = (
     <div className="dropdown" onMouseDown={(e) => e.preventDefault()}>
-      <button>Profile</button>
+      <button onClick={() => setShowProfilePage(true)}>Profile</button>
       <button
         className="logout-button"
         onClick={() => {
