@@ -40,6 +40,9 @@ public class PlaylistExportController {
 
         filterRecommendations(trackRecommendations, blockedArtists, blockedSongs);
 
+        // Log genre usage in UserHistory and GenreStats
+        userService.logGenreUsage(user, chosenGenres);
+
         return trackRecommendations;
     }
 
@@ -81,5 +84,8 @@ public class PlaylistExportController {
                 .toList();
         String playlistId = api.createPlaylist(spotifyId, name, description);
         api.addTracksToPlaylist(playlistId, trackUris);
+
+        // Log the playlist export action in UserHistory
+        userService.logUserAction(user, "Exported Playlist: " + name);
     }
 }

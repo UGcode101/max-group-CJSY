@@ -2,6 +2,8 @@ package org.launchcode.threemix.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class GenreStats {
     @Id
@@ -12,6 +14,8 @@ public class GenreStats {
     private String genre2;
     private String genre3;
 
+    public GenreStats(List<String> genres) {
+    }
     // Getters and Setters
     public Long getId() {
         return id;

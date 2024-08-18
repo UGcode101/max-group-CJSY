@@ -20,6 +20,30 @@ public class UserHistory {
     private String playlistName;
     private LocalDateTime exportedAt;
 
+    // Default constructor
+    public UserHistory() {}
+
+    // Constructor for general user action logging
+    public UserHistory(User user, String playlistName, LocalDateTime exportedAt) {
+        this.user = user;
+        this.playlistName = playlistName;
+        this.exportedAt = exportedAt;
+    }
+
+    // Constructor for genre stats logging
+    public UserHistory(User user, GenreStats genreStats) {
+        this.user = user;
+        this.genreStats = genreStats;
+        this.exportedAt = LocalDateTime.now(); // Automatically set the exported time to now
+    }
+
+    // Constructor for logging blocked artist or song actions
+    public UserHistory(User user, String entityType, String entityId, LocalDateTime exportedAt) {
+        this.user = user;
+        this.playlistName = entityType + ": " + entityId; // Store entity type and ID in playlistName for simplicity
+        this.exportedAt = exportedAt;
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;

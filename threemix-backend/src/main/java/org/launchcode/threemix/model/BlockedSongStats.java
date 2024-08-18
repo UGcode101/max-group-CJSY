@@ -10,6 +10,14 @@ public class BlockedSongStats {
 
     private String songId;
 
+    // Constructor with songId parameter
+    public BlockedSongStats(String songId) {
+        this.songId = songId;
+    }
+
+    // Default constructor
+    public BlockedSongStats() {}
+
     // Getters and Setters
     public Long getId() {
         return id;

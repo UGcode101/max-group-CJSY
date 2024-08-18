@@ -10,6 +10,12 @@ public class BlockedArtistStats {
 
     private String artistId;
 
+    public BlockedArtistStats() {}
+
+    public BlockedArtistStats(String artistId) {
+        this.artistId = artistId;
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;
