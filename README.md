@@ -47,9 +47,9 @@ ThreeMix is a web application that allows users to create custom playlists by se
 
 3. **Configure Spotify API**
 
-   Create a ClientConstants class and put the secret in the folder. This folder is not checked in to Github.
+   Create a ClientConstants class and put the secret in the folder. This folder is not checked in to GitHub.
 
-   ```properties
+   ```java
    package org.launchcode.threemix.secret;
 
    public class ClientConstants {
@@ -60,11 +60,19 @@ ThreeMix is a web application that allows users to create custom playlists by se
 
 4. **Build and Run the Application**
 
-   Use Gradle to build and run the application:
- 
-   Use bootRun
+   Use Gradle to build and run the back-end:
 
-   Open terminal and do `npm run dev`.
+   Gradle > Tasks > application > bootRun 
+
+   Use npm to build and run the front-end:
+
+   In your terminal:
+
+   ```bash
+   cd threemix-frontend
+   npm install
+   npm run dev
+   ```
 
 5. **Access the Application**
 
@@ -85,12 +93,8 @@ ThreeMix is a web application that allows users to create custom playlists by se
 - **Java & Spring Boot**: Backend framework
 - **MySQL**: Database
 - **Spotify Web API**: Integration with Spotify
-- **React**: Frontend framework (if applicable)
-- **Grid: CSS**: Layout and design
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **React -- Vite**: Frontend library 
+- **CSS -- Grid**: Layout and design
 
 ## Disclaimer
 
