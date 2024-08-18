@@ -86,7 +86,7 @@ public class ThreemixController {
                         Cookie accessTokenCookie = new Cookie("accessToken", t.access_token());
                         accessTokenCookie.setSecure(true); // Ensure this is set to true in production
                         response.addCookie(accessTokenCookie);
-                        userService.createIfNewUser(t.access_token(), session);
+                        userService.createIfNewUser(session);
                     },
                     () -> {
                         try {
@@ -108,7 +108,7 @@ public class ThreemixController {
 
     @PostMapping(value = "/refresh")
     public void refresh(HttpServletResponse response, HttpSession session) throws IOException {
-        SpotifyApi api = SpotifyApi.fromSession(session, null, restTemplate);
+        SpotifyApi api = SpotifyApi.fromSession(session);
         TokenResponse tokenResponse = api.refresh();
         Cookie accessTokenCookie = new Cookie("accessToken", tokenResponse.access_token());
         accessTokenCookie.setSecure(true);

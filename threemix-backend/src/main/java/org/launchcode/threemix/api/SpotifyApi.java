@@ -9,6 +9,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Base64;
 import java.util.List;
@@ -21,13 +22,9 @@ public class SpotifyApi {
     private String accessToken;
     private String refreshToken;
 
-    public static SpotifyApi fromSession(HttpSession session, String accessToken, RestTemplate restTemplate) {
+    public static SpotifyApi fromSession(HttpSession session) {
         return Optional.ofNullable((SpotifyApi) session.getAttribute("spotifyApi"))
-                .orElseGet(() -> {
-                    SpotifyApi api = new SpotifyApi(restTemplate, accessToken, null);
-                    session.setAttribute("spotifyApi", api);
-                    return api;
-                });
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
     }
 
     public SpotifyApi(RestTemplate restTemplate, String accessToken, String refreshToken) {

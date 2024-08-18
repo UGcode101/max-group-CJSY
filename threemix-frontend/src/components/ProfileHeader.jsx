@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getCurrentUserProfile } from "../api/SpotifyApi";
 import { logout } from "../api/backendApi";
+import { AuthContext } from "../App";
 
-export const ProfileHeader = ({accessToken, setAccessToken, setShowProfilePage}) => {
+export const ProfileHeader = ({setShowProfilePage}) => {
   const [profileInfo, setProfileInfo] = useState();
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const auth = useContext(AuthContext);
   useEffect(() => {
-    if (accessToken) {
-      getCurrentUserProfile(setProfileInfo);
+    if (auth.accessToken) {
+      getCurrentUserProfile(auth, setProfileInfo);
 
     }
-  }, [accessToken, setProfileInfo])
+  }, [setProfileInfo, auth])
 
   const loginLink = (
     <div className="login">
@@ -20,11 +22,15 @@ export const ProfileHeader = ({accessToken, setAccessToken, setShowProfilePage})
   
   const dropdown = (
     <div className="dropdown" onMouseDown={(e) => e.preventDefault()}>
-      <button onClick={() => setShowProfilePage(true)}>Profile</button>
+      <button onClick={() => {
+        setDropdownVisible(false);
+        setShowProfilePage(true);
+      }}>Profile</button>
       <button
         className="logout-button"
         onClick={() => {
-          logout(setAccessToken);
+          auth.setAccessToken();
+          logout(auth.setAccessToken);
           setProfileInfo();
           setShowProfilePage(false);
         }}
@@ -35,7 +41,7 @@ export const ProfileHeader = ({accessToken, setAccessToken, setShowProfilePage})
   );
 
   const profileFragment =
-    profileInfo && (
+    auth.accessToken && profileInfo && (
       <>
         <div className="profile-header">{profileInfo.display_name}</div>
         <div className="profile-pic">
@@ -57,7 +63,7 @@ export const ProfileHeader = ({accessToken, setAccessToken, setShowProfilePage})
 
   return (
     <>
-      { profileFragment || !accessToken && loginLink}
+      { profileFragment || !auth.accessToken && loginLink}
     </>
   );
 };
