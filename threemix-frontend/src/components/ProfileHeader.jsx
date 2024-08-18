@@ -25,6 +25,8 @@ export const ProfileHeader = ({accessToken, setAccessToken, setShowProfilePage})
         className="logout-button"
         onClick={() => {
           logout(setAccessToken);
+          setProfileInfo();
+          setShowProfilePage(false);
         }}
       >
         Log out
