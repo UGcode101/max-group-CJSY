@@ -4,6 +4,7 @@ import { ProfileHeader } from "./components/ProfileHeader";
 import { Threemix } from './components/Threemix.jsx'
 import { getToken } from './api/SpotifyApi.js';
 import { ProfilePage } from './components/ProfilePage.jsx';
+import { Spotify } from './components/Spotify.jsx';
 
 function App() {
   const [accessToken, setAccessToken] = useState(getToken());
@@ -27,17 +28,21 @@ function App() {
     </>
   )
 
-  const profileClass = showProfilePage ? "profile" : ""
+  const isSmall = showProfilePage;
+  const smallClass = isSmall ? "small" : ""
+  const tagline = isSmall
+    ? "for "
+    : "A multi-genre playlist generator created for ";
 
   return (
     <>
       <div className="grid-container">
-        <div className={`app-name-container ${profileClass}`}>
+        <div className={`app-name-container ${smallClass}`}>
           <div className="app-name">
             <h1>THREEMIX</h1>
           </div>
           <div className="app-tagline">
-            <h4>A multi-genre playlist generator created for Spotify</h4>
+            <h4> { tagline }<Spotify includeName /></h4>
           </div>
         </div>
 
