@@ -1,12 +1,14 @@
 import { Search } from "./Search";
 import { ChosenGenres } from "./ChosenGenres";
 import { Playlist } from "./Playlist";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Generate } from "./Generate";
+import { AuthContext } from "../App";
 
-export const Threemix = ({ accessToken }) => {
+export const Threemix = () => {
   const [chosenGenres, setChosenGenres] = useState([]);
   const [playlist, setPlaylist] = useState();
+  const auth = useContext(AuthContext);
   const playlistScreen = (
     <>
       <Playlist playlist={playlist} />
@@ -28,7 +30,7 @@ export const Threemix = ({ accessToken }) => {
 
   return (
     <>
-      {accessToken && loggedInFeatures}
+      {auth.accessToken && loggedInFeatures}
     </>
   );
 };

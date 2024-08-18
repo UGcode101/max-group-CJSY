@@ -1,13 +1,13 @@
 import { refresh } from "./backendApi";
 
-export const getGenreSeeds = (setAllGenres) => {
+export const getGenreSeeds = (auth, setAllGenres) => {
   const headers = { Authorization: `Bearer ${getToken()}` };
   const url =
     "https://api.spotify.com/v1/recommendations/available-genre-seeds";
   fetch(url, { headers })
     .then((r) => {
       if (r.status === 401) {
-        return refresh().then(() => {
+        return refresh(auth).then(() => {
           const newHeaders = { Authorization: `Bearer ${getToken()}` };
           return fetch(url, { headers: newHeaders });
         });
@@ -25,13 +25,13 @@ export const getToken = () => document.cookie
   .find((row) => row.startsWith("accessToken="))
   ?.split("=")[1];  
 
-export const getCurrentUserProfile = (setProfileInfo) => {
+export const getCurrentUserProfile = (auth, setProfileInfo) => {
   const headers = { Authorization: `Bearer ${getToken()}` } 
   const url = "https://api.spotify.com/v1/me";
   fetch(url, { headers })
     .then(r => {
       if (r.status === 401) {
-        return refresh().then(() => {
+        return refresh(auth).then(() => {
           const newHeaders = { Authorization: `Bearer ${getToken()}` }; 
           return fetch(url, { headers: newHeaders });
         });

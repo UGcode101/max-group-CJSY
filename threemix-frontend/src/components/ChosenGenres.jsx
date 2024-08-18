@@ -1,18 +1,17 @@
 import PropTypes from "prop-types";
 export const ChosenGenres = ({ setChosenGenres, chosenGenres }) => {
   const htmlifyGenre = (genre) => (
-    <>
-      <div>
-        {genre}
-        <button className="fill"
-          onClick={() =>
-            setChosenGenres(chosenGenres.filter((g) => g !== genre))
-          }
-        >
-          x
-        </button>
-      </div>
-    </>
+    <div key={genre}>
+      {genre}
+      <button
+        className="fill"
+        onClick={() =>
+          setChosenGenres(chosenGenres.filter((g) => g !== genre))
+        }
+      >
+        x
+      </button>
+    </div>
   );
 
   return (
