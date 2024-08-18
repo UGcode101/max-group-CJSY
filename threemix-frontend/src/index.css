@@ -35,7 +35,7 @@ body {
   line-height: 1.1;
 } */
 
-button {
+/* button {
   border-radius: 8px;
   border: 3.5px solid;
   border-color: #09f1b8;
@@ -44,11 +44,11 @@ button {
   font-weight: 700;
   font-family: inherit;
   background-color: #fff;
+  color:#000119;
   cursor: pointer;
   transition: border-color 0.25s;
   margin: 0.2em;
-  
-}
+} */
 
 button:hover {
   /* border-color: #646cff; */
@@ -111,7 +111,7 @@ button:focus-visible {
 :root {
   --color-background: #000119;
   --stroke-width: calc(1em / 16);
-  --font-size: 18vmin;
+  --font-size: 18vw;
   --font-weight: 700;
   --letter-spacing: calc(1em / 8);
 }
@@ -134,7 +134,8 @@ h1 {
   background-clip: text;
   background-image: linear-gradient(to right, #09f1b8, #00a2ff, #ff00d2, #fed90f);
   color: var(--color-background);
-  font-size: var(--font-size);
+  /* font-size: min(var(--font-size), 90pt); */
+  font-size: 8cqw;
   font-weight: var(--font-weight);
   letter-spacing: var(--letter-spacing);
   padding: calc(--stroke-width / 2);
@@ -143,7 +144,7 @@ h1 {
   margin: 0;
 }
 
-h3 {
+h4 {
   margin: 0;
 }
 
@@ -170,6 +171,9 @@ display: grid;
   grid-column: 3 / 11;
   grid-row: 2/3;
 }
+.app-name {
+  
+}
 
 
 
@@ -182,7 +186,7 @@ display: grid;
 } */
 
 .app-tagline {
-  margin-top: -30px;
+  margin-top: -2cqw;
 }
 
 .profile-header {
@@ -193,6 +197,7 @@ display: grid;
   grid-column: 8/13;
   grid-row: 1/2;
   font-weight: bold;
+  align-self: flex-end;
 }
 
 .profile-pic {
@@ -203,12 +208,23 @@ display: grid;
   /* margin-left: 15px; */
 }
 
-.logout-button {
+.logout-butt {
   display: grid;
   grid-column: 12/13;
   grid-row: 1/2;
 
   /* margin-left: 15px; */
+}
+
+.dropdown {
+  text-align: left;
+  /* float: left; */
+  grid-row: 2/3;
+  grid-column: 11/13;
+}
+
+.dropdown > button {
+  width: 100%;
 }
 
 .search {
@@ -247,11 +263,6 @@ display: grid;
 .circle-pic {
   border-radius: 50%;
   width: 66px;
-}
-
-.dropdown {
-   grid-column: 11/12;
-   grid-row: 1/2;
 }
 
 .login {

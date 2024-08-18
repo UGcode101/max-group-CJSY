@@ -9,6 +9,7 @@ export const Playlist = ({playlist}) => {
     return (
       <li key={track.id}>
         {track.name}
+        {track.artists.map(a => ` - ${a.name}`)}
         <button onClick={() => blockSong(track.id)}>block song</button>
       </li>
     );

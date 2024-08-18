@@ -19,7 +19,7 @@ function App() {
             <h1>THREEMIX</h1>
           </div>
           <div className="app-tagline">
-            <h3>A multi-genre playlist generator created for Spotify</h3>
+            <h4>A multi-genre playlist generator created for Spotify</h4>
           </div>
         </div>
 
