@@ -1,12 +1,13 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
-
+  --color-background: #000119;
+  --stroke-width: calc(1em / 16);
+  --font-size: 8cqw;
+  --font-weight: 700;
+  --letter-spacing: calc(1em / 8);
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -16,14 +17,6 @@
 /* trying font stuff */
 @use postcss-preset-env {
   stage: 0;
-}
-
-:root {
-  --color-background: #000119;
-  --stroke-width: calc(1em / 16);
-  --font-size: 8cqw;
-  --font-weight: 700;
-  --letter-spacing: calc(1em / 8);
 }
 
 body {
@@ -59,6 +52,10 @@ h4 {
   width: 66px;
 }
 
+.tracklist {
+  font-size: 13px;
+}
+
 tbody tr:nth-of-type(even):not(:hover) { background: #21212f; }
 table {
   border-collapse: collapse;
@@ -68,25 +65,27 @@ table {
   margin:auto;
 }
 
-
 .tracklist td, th {
   padding: .5ch 1ch;
 }
 
-td:hover {
-  background: #666666;
-}
-
-tr:hover {
+tbody tr:hover {
   background: #808080;
 }
 
 .track-artist-name {
-  width: 40%;
+  align-self: flex-start;
+  width: 20vw;
+}
+
+.track-name{
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: -4px;
 }
 
 .album-name {
-  width: 25%;
+  width: 15vw;
 }
 
 /* Icons */
@@ -230,7 +229,7 @@ tr:hover {
 }
 
 .login {
-grid-column: 6/8;
+  grid-column: 6/8;
   grid-row: 3/4;
   margin-top: 20px;
   

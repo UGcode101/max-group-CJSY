@@ -17,15 +17,17 @@ export const Tracklist = ({ tracklist }) => {
           <img src={track.album?.url}></img>
         </td>
         <td className="track-artist-name">
-          {track.name} {track.artists?.map((a) => ` - ${a.name}`)}
+          <div className="track-name">{track.name}</div>{" "}
+          <div className="artist-name">{track.artists?.map((a) => a.name)}</div>
         </td>
         <td className="album-name">{track.album?.name}</td>
         <td>
-          {duration.getMinutes()}:{String(duration.getSeconds()).padStart(2, '0')}
+          {duration.getMinutes()}:
+          {String(duration.getSeconds()).padStart(2, "0")}
         </td>
         <td>
           {/* <button onClick={() => blockSong(auth, track.id)}>block song</button> */}
-          <RemoveSongIcon />
+          <RemoveSongIcon onClick={() => {}} />
           <BlockSongIcon />
           <BlockArtistIcon />
         </td>
