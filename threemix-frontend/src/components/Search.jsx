@@ -37,6 +37,16 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
     return almostAllGenres.filter((g) => g.includes(searchTerm));
   }, [almostAllGenres, searchTerm, chosenGenres.length]);
 
+  const searchResults = options.length === 0 && searchTerm.length > 0 ? (
+    <div className="no--search-results">
+      Ope! &quot;{searchTerm}&quot; is not an available genre.
+    </div>
+  ): (
+    <div className="search-options">
+      {options.slice(0, 9).map(htmlifyOption)}
+    </div>
+  );
+
   return (
     chosenGenres.length < 3 && (
     <>
@@ -46,12 +56,10 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
             type="search"
             ref={searchRef}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
         />
-      </div>
-      <div className="search-options">
-        {options.slice(0, 9).map(htmlifyOption)}
-      </div>
+        </div>
+        {searchResults}
       </>
     )
   );

@@ -4,18 +4,68 @@ const checkError = (auth, response) => {
     auth.setAccessToken(null);
   }
   return response;
-}
+};
 
-export const generatePlaylist = (auth, genres, setPlaylist) => fetch(
+export const generateTracklist = (auth, genres, setTracklist) =>
+  setTracklist({
+    tracks: [
+      {
+        id: "id1",
+        name: "Dois Rois",
+        artists: [{ name: "Skank" }],
+        album: {
+          name: "Radiola",
+          url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
+          //          url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+        },
+        duration_ms: 67890,
+      },
+      {
+        id: "id2",
+        name: "STREET",
+        artists: [{ name: "NGHTMRE" }],
+        album: {
+          name: "Street",
+          url: "	https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
+        },
+        duration_ms: 56789,
+      },
+      {
+        id: "id3",
+        name: "Dois Rois",
+        artists: [{ name: "Skank" }],
+        album: {
+          name: "Radiola",
+          url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
+          //          url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+        },
+        duration_ms: 67890,
+      },
+      {
+        id: "id4",
+        name: "STREET",
+        artists: [{ name: "NGHTMRE" }],
+        album: {
+          name: "Street",
+          url: "	https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
+        },
+        duration_ms: 56789,
+      },
+    ],
+  });
+
+
+export const generateTracklist2 = (auth, genres, setTracklist) =>
+  fetch(
     `http://localhost:8080/generateTrackList?chosenGenres=${genres.join(",")}`,
     {
       method: "POST",
       credentials: "include",
     }
-)
-    .then(r => checkError(auth, r))
-    .then(r => r.json())
-    .then(setPlaylist)
+  )
+    .then((r) => checkError(auth, r))
+    .then((r) => r.json())
+    .then(setTracklist)
     .catch((e) => console.log(e));
 
 export const blockSong = (auth, songId) =>
@@ -24,8 +74,6 @@ export const blockSong = (auth, songId) =>
     credentials: "include",
   })
     .then((r) => checkError(auth, r))
-    .then((r) => r.json())
-    .then(console.log)
     .catch((e) => console.log(e));
 
 export const createPlaylist = (auth, name, description, tracks) =>

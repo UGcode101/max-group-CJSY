@@ -55,7 +55,7 @@ public class ThreemixController {
         // Use the generated state
         attributes.addAttribute("state", state);
 
-        return new RedirectView("https://accounts.spotify.com/authorize");
+        return new RedirectView(SpotifyApi.BASE_URL + "/authorize");
     }
 
     @GetMapping(value = "/callback")

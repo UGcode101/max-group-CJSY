@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SpotifyApi {
+    public static final String BASE_URL = "https://accounts.spotify.com";
 
     private final RestTemplate restTemplate;
     private String accessToken;
@@ -75,7 +76,7 @@ public class SpotifyApi {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
-        TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
+        TokenResponse tokenResponse = restTemplate.postForObject(BASE_URL + "/api/token", request,
                 TokenResponse.class);
         Optional.ofNullable(tokenResponse).ifPresent(t -> {
             accessToken = t.access_token();
@@ -85,24 +86,24 @@ public class SpotifyApi {
     }
 
     public SpotifyUser me() {
-        return get("https://api.spotify.com/v1/me", SpotifyUser.class);
+        return get(BASE_URL + "/v1/me", SpotifyUser.class);
     }
 
     public Map<?, ?> recommendations(List<String> chosenGenres) {
         String genres = String.join(",", chosenGenres);
-        return get("https://api.spotify.com/v1/recommendations?seed_genres=" + genres,
+        return get(BASE_URL + "/v1/recommendations?seed_genres=" + genres,
                 Map.class);
     }
 
     public String createPlaylist(String spotifyId, String playlistName, String description) {
         Map<String, String> requestBody =
                 Map.of("name", playlistName, "description", description, "public", "true");
-        return post("https://api.spotify.com/v1/users/" + spotifyId + "/playlists", requestBody, Map.class)
+        return post(BASE_URL + "/v1/users/" + spotifyId + "/playlists", requestBody, Map.class)
                 .get("id").toString();
     }
 
     public void addTracksToPlaylist(String playlistId, List<String> trackUris) {
         Map<String, List<String>> requestBody = Map.of("uris", trackUris);
-        post("https://api.spotify.com/v1/playlists/" + playlistId + "/tracks", requestBody, Map.class);
+        post(BASE_URL + "/v1/playlists/" + playlistId + "/tracks", requestBody, Map.class);
     }
 }

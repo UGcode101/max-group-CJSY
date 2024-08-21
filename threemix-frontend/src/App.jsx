@@ -11,10 +11,14 @@ export const AuthContext = createContext();
 function App() {
   const [accessToken, setAccessToken] = useState(getToken());
   const [showProfilePage, setShowProfilePage] = useState(false);
+  const [showTracklistPage, setShowTracklistPage] = useState(false);
 
   const threemix = (
     <>
-      <Threemix />
+      <Threemix
+        accessToken={accessToken}
+        setShowTracklistPage={setShowTracklistPage}
+      />
     </>
   );
 
@@ -24,7 +28,7 @@ function App() {
     </>
   )
 
-  const isSmall = showProfilePage;
+  const isSmall = showProfilePage || showTracklistPage;
   const smallClass = isSmall ? "small" : ""
   const tagline = isSmall
     ? "for "
