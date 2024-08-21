@@ -55,7 +55,7 @@ public class ThreemixController {
         // Use the generated state
         attributes.addAttribute("state", state);
 
-        return new RedirectView(SpotifyApi.BASE_URL + "/authorize");
+        return new RedirectView(SpotifyApi.BASE_ACCOUNT_URL + "/authorize");
     }
 
     @GetMapping(value = "/callback")
@@ -78,7 +78,8 @@ public class ThreemixController {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
         try {
-            TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
+            TokenResponse tokenResponse = restTemplate.postForObject(SpotifyApi.BASE_ACCOUNT_URL + "/api/token",
+                    request,
                     TokenResponse.class);
             Optional.ofNullable(tokenResponse).ifPresentOrElse(
                     t -> {
