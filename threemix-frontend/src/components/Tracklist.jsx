@@ -1,15 +1,22 @@
 import { blockSong, createPlaylist } from "../api/backendApi";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { AuthContext } from "../App";
 import { BlockArtistIcon, BlockSongIcon, Clock, RemoveSongIcon, Undo } from "./Icons";
 
+  const undo = (title, className, id, list, setList) => (
+    <Undo className={className} title={title} onClick={() => setList(list.filter((e) => e !== id))} />
+  );
+
 export const Tracklist = ({ tracklist }) => {
   const [name, setName] = useState("New playlist");
+  const [removedSongs, setRemovedSongs] = useState([]);
+  const [blockedSongs, setBlockedSongs] = useState([]);
+  const [blockedArtists, setBlockedArtists] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const auth = useContext(AuthContext);
   const tracks = tracklist?.tracks;
 
-  const trackList = tracks?.map((track, i) => {
+  const trackList = useMemo(() => tracks?.map((track, i) => {
     const duration = new Date(track.duration_ms);
     return (
       <tr key={track.id}>
@@ -28,14 +35,33 @@ export const Tracklist = ({ tracklist }) => {
         </td>
         <td>
           {/* <button onClick={() => blockSong(auth, track.id)}>block song</button> */}
-          <RemoveSongIcon onClick={() => {}} />
-          <BlockSongIcon />
-          <BlockArtistIcon />
-          <Undo />
+          {removedSongs.includes(track.id) ? (
+            undo("Undo remove song", "undo-remove-song", track.id, removedSongs, setRemovedSongs)
+          ) : (
+            <RemoveSongIcon
+              onClick={() => setRemovedSongs([...removedSongs, track.id])}
+            />
+          )}
+          {blockedSongs.includes(track.id) ? (
+            undo("Undo block song", "undo-block-song", track.id, blockedSongs, setBlockedSongs)
+          ) : (
+            <BlockSongIcon
+              onClick={() => setBlockedSongs([...blockedSongs, track.id])}
+            />
+          )}
+          {blockedArtists.includes(track.artists?.[0].id) ? (
+            undo("Undo block artist", "undo-block-artist", track.artists?.[0].id, blockedArtists, setBlockedArtists)
+          ) : (
+            <BlockArtistIcon
+              onClick={() =>
+                setBlockedArtists([...blockedArtists, track.artists?.[0].id])
+              }
+            />
+          )}
         </td>
       </tr>
     );
-  });
+  }), [removedSongs, blockedSongs, blockedArtists, tracks]);
   return (
     <>
       <div className="tracklist">

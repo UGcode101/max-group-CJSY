@@ -82,6 +82,30 @@ th {
   padding: 0.5ch 1ch;
 }
 
+.undo-2 {
+  stroke: #67c4a6;
+}
+
+.undo-5 {
+  fill: #67c4a6;
+}
+
+.undo-block-song .undo-2 {
+  stroke:#00a2ff;
+}
+
+.undo-block-song .undo-5 {
+  fill:#00a2ff; 
+}
+
+.undo-block-artist .undo-2 {
+  stroke:#ff00d2;
+}
+
+.undo-block-artist .undo-5 {
+  fill:#ff00d2; 
+}
+
 tbody tr:hover {
   background: #808080;
 }
@@ -302,10 +326,6 @@ tbody tr:hover {
   text-align: left;
   grid-column: 2/12;
   grid-row: 4/5;
-}
-
-.duration-header {
-  
 }
 
 .duration {

@@ -12,7 +12,7 @@ export const generateTracklist = (auth, genres, setTracklist) =>
       {
         id: "id1",
         name: "Dois Rois",
-        artists: [{ name: "Skank" }],
+        artists: [{ name: "Skank", id: "a2" }],
         album: {
           name: "Radiola",
           url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
@@ -23,7 +23,7 @@ export const generateTracklist = (auth, genres, setTracklist) =>
       {
         id: "id2",
         name: "STREET",
-        artists: [{ name: "NGHTMRE" }],
+        artists: [{ name: "NGHTMRE", id: "a1" }],
         album: {
           name: "Street",
           url: "	https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
@@ -33,7 +33,7 @@ export const generateTracklist = (auth, genres, setTracklist) =>
       {
         id: "id3",
         name: "Dois Rois",
-        artists: [{ name: "Skank" }],
+        artists: [{ name: "Skank", id: "a2" }],
         album: {
           name: "Radiola",
           url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
@@ -44,7 +44,7 @@ export const generateTracklist = (auth, genres, setTracklist) =>
       {
         id: "id4",
         name: "STREET",
-        artists: [{ name: "NGHTMRE" }],
+        artists: [{ name: "NGHTMRE", id: "a1" }],
         album: {
           name: "Street",
           url: "	https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
