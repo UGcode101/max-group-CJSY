@@ -1,7 +1,7 @@
 import { blockSong, createPlaylist } from "../api/backendApi";
 import { useContext, useState } from "react";
 import { AuthContext } from "../App";
-import { BlockArtistIcon, BlockSongIcon, RemoveSongIcon } from "./Icons";
+import { BlockArtistIcon, BlockSongIcon, Clock, RemoveSongIcon, Undo } from "./Icons";
 
 export const Tracklist = ({ tracklist }) => {
   const [name, setName] = useState("New playlist");
@@ -21,7 +21,7 @@ export const Tracklist = ({ tracklist }) => {
           <div className="artist-name">{track.artists?.map((a) => a.name)}</div>
         </td>
         <td className="album-name">{track.album?.name}</td>
-        <td>
+        <td className="duration">
           {duration.getMinutes()}:
           {String(duration.getSeconds()).padStart(2, "0")}
         </td>
@@ -30,6 +30,7 @@ export const Tracklist = ({ tracklist }) => {
           <RemoveSongIcon onClick={() => {}} />
           <BlockSongIcon />
           <BlockArtistIcon />
+          <Undo />
         </td>
       </tr>
     );
@@ -44,7 +45,7 @@ export const Tracklist = ({ tracklist }) => {
               <th></th>
               <th>Title</th>
               <th>Album</th>
-              <th>Duration</th>
+              <th className="duration-header"><Clock/></th>
             </tr>
           </thead>
           <tbody>{trackList}</tbody>

@@ -160,7 +160,7 @@ export const getToken = () => document.cookie
 
 export const getCurrentUserProfile = (auth, setProfileInfo) => {
   const headers = { Authorization: `Bearer ${getToken()}` } 
-  const url = "https://api.spotify.comp/v1/me";
+  const url = "https://api.spotify.com/v1/me";
   fetch(url, { headers })
     .then(r => {
       if (r.status === 401) {
@@ -168,7 +168,7 @@ export const getCurrentUserProfile = (auth, setProfileInfo) => {
           const newHeaders = { Authorization: `Bearer ${getToken()}` }; 
           return fetch(url, { headers: newHeaders });
         });
-      };
+      }
       return r;
     })
     .then((r) => r.json())

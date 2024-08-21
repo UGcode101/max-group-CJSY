@@ -164,3 +164,189 @@ export const BlockArtistIcon = () => (
     <circle className="dumpster" cx="120.11" cy="132.49" r="2.62" />
   </svg>
 );
+
+export const RemoveGenreIcon = ({ onClick }) => (
+  <svg
+    onClick={onClick}
+    className="icon"
+    id="Layer_1"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 77.68 115.7"
+  >
+    <title>Remove genre</title>
+    <defs>
+      <style>
+        {`
+      .removegenre1 {
+        fill: #231f20;
+      }
+
+      .removegenre2 {
+        fill: #fff;
+      }
+
+      .removegenre3 {
+        fill: none;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: 4px;
+      }
+        `}
+      </style>
+    </defs>
+    <path
+      className="removegenre2"
+      d="M69.76,109.72c-.3,3.29-3.24,5.98-6.54,5.98H17.77c-3.3,0-6.28-2.69-6.61-5.97L2.67,26.88c-.34-3.28,2.09-5.97,5.39-5.97h63.68c3.3,0,5.76,2.69,5.46,5.98l-7.44,82.84Z"
+    />
+    <path
+      className="removegenre2"
+      d="M75.07,27.48c-.27,1.07-1.34,1.67-2.39,1.34L3.62,7.16c-1.05-.33-1.69-1.47-1.42-2.54l.8-3.19C3.26.36,4.33-.24,5.38.09l69.06,21.66c1.05.33,1.69,1.47,1.42,2.54l-.8,3.19Z"
+    />
+    <path
+      className="removegenre3"
+      d="M51.68,14.98c-.27,1.07-1.34,1.67-2.39,1.34l-16.99-5.33c-1.05-.33-1.69-1.47-1.42-2.54l1.19-4.77c.27-1.07,1.34-1.67,2.39-1.34l16.99,5.33c1.05.33,1.69,1.47,1.42,2.54l-1.19,4.77Z"
+    />
+    <ellipse
+      className="removegenre1"
+      cx="38.66"
+      cy="92.46"
+      rx="13.32"
+      ry="8.93"
+      transform="translate(-29.46 18.95) rotate(-20.13)"
+    />
+    <g>
+      <path
+        className="removegenre1"
+        d="M28.94,41.9c2.09-1.68,5.1-1.56,7.72-.99s5.28,1.47,7.94,1.06c4.31-.67,7.31-4.55,9.61-8.28.69,1.44-.27,3.11-1.28,4.35-4.8,5.93-11.63,10.17-19.06,11.84"
+      />
+      <path
+        className="removegenre1"
+        d="M29.7,43.2c1.91-1.45,4.33-1.32,6.57-.84,2.95.62,5.84,1.56,8.89,1.03,4.76-.83,7.97-5.09,10.36-8.94l-2.75-.36c.72,1.81-1.66,3.87-2.78,5.04-1.49,1.55-3.12,2.96-4.88,4.18-3.52,2.45-7.45,4.18-11.62,5.14-1.88.43-1.09,3.34.8,2.9,4.81-1.11,9.41-3.22,13.37-6.18,1.97-1.48,3.8-3.11,5.44-4.96s3.62-4.31,2.59-6.91c-.47-1.17-2.02-1.53-2.75-.36-2.25,3.62-5.28,7.76-10.02,7.63-2.69-.08-5.27-1.14-7.94-1.44-2.34-.26-4.86.02-6.78,1.48-.65.5-.98,1.29-.54,2.06.36.64,1.41,1.03,2.06.54h-.02Z"
+      />
+    </g>
+    <rect
+      className="removegenre1"
+      x="36.4"
+      y="38.38"
+      width="4.06"
+      height="52.71"
+      transform="translate(-23.04 21.28) rotate(-24.04)"
+    />
+  </svg>
+);
+
+export const Undo = () => (
+  <svg
+    className="icon"
+    id="Layer_1"
+    xmlns="http://www.w3.org/2000/svg"
+    // xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 0 141.1 143.66"
+  >
+    <defs>
+      <style>
+        {`
+      .undo-1, .undo-2 {
+        fill: none;
+      }
+
+      .undo-3 {
+        clip-path: url(#clippath-1);
+      }
+
+      .undo-2 {
+        stroke: #67c4a6;
+        stroke-miterlimit: 10;
+        stroke-width: 15px;
+      }
+
+      .undo-4 {
+        clip-path: url(#clippath);
+      }
+
+      .undo-5 {
+        fill: #67c4a6;
+      }
+        `}
+      </style>
+      <clipPath id="clippath">
+        <rect className="undo-1" x="61.71" y="7.61" width="79.39" height="76.46" />
+      </clipPath>
+      <clipPath id="clippath-1">
+        <rect className="undo-1" y="74.35" width="139.29" height="69.31" />
+      </clipPath>
+    </defs>
+    <g>
+      <ellipse
+        className="undo-5"
+        cx="62.68"
+        cy="106.72"
+        rx="8.67"
+        ry="12.93"
+        transform="translate(-48.34 161.41) rotate(-85.8)"
+      />
+      <g>
+        <path
+          className="undo-5"
+          d="M74.31,58.1c2.53-.65,5.13.66,7.23,2.21s4.09,3.41,6.6,4.11c4.08,1.14,8.29-1.1,11.81-3.48.03,1.55-1.49,2.64-2.88,3.34-6.61,3.32-14.35,4.34-21.6,2.85"
+        />
+        <path
+          className="undo-5"
+          d="M74.46,59.56c2.27-.52,4.36.57,6.15,1.88,2.36,1.73,4.54,3.72,7.45,4.47,4.54,1.17,9.09-1.32,12.74-3.77l-2.29-1.42c-.09,1.89-3.01,2.76-4.48,3.34-1.94.77-3.94,1.37-5.99,1.74-4.09.76-8.26.72-12.33-.1-1.84-.37-2.3,2.51-.45,2.89,4.7.95,9.62.91,14.3-.12,2.34-.52,4.61-1.23,6.79-2.21s4.93-2.36,5.06-5.08c.06-1.22-1.17-2.16-2.29-1.42-3.44,2.31-7.78,4.75-11.91,2.74-2.35-1.15-4.21-3.11-6.45-4.45-1.97-1.17-4.31-1.92-6.59-1.4-.77.18-1.38.75-1.3,1.61.06.71.84,1.47,1.61,1.3h-.01Z"
+        />
+      </g>
+      <rect
+        className="undo-5"
+        x="71.6"
+        y="56.51"
+        width="3.94"
+        height="51.18"
+        transform="translate(.41 -.37) rotate(.29)"
+      />
+    </g>
+    <g className="undo-4">
+      <circle className="undo-2" cx="73.28" cy="79.38" r="55.39" />
+    </g>
+    <g className="undo-3">
+      <circle className="undo-2" cx="73.37" cy="79.95" r="55.39" />
+    </g>
+    <path
+      className="undo-5"
+      d="M23.84,26.8c-1.91-1.1-1.91-2.9,0-4L62.53.47c1.91-1.1,3.46-.2,3.46,2v44.67c0,2.2-1.56,3.1-3.46,2L23.84,26.8Z"
+    />
+  </svg>
+);
+
+export const Clock = () => (
+  <svg
+    className="no-hover"
+    version="1.1"
+    id="Layer_1"
+    xmlns="http://www.w3.org/2000/svg"
+    x="0px"
+    y="0px"
+    viewBox="0 0 156.26 146.17"
+  >
+      <style>
+        {`
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:6;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;}
+  `}
+      </style>
+    <circle className="st0" cx="79.38" cy="73.81" r="68.36" />
+    <g>
+      <path
+        className="st1"
+        d="M82.54,78.71c0,1.65-1.35,3-3,3h-2.07c-1.65,0-3-1.35-3-3V28.85c0-1.65,1.35-3,3-3h2.07c1.65,0,3,1.35,3,3
+		V78.71z"
+      />
+    </g>
+    <g>
+      <path
+        className="st1"
+        d="M79.13,81.47c-1.65,0-3-1.35-3-3v-2.38c0-1.65,1.35-3,3-3h32.99c1.65,0,3,1.35,3,3v2.38c0,1.65-1.35,3-3,3
+		H79.13z"
+      />
+    </g>
+  </svg>
+);
