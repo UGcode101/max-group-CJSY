@@ -2,7 +2,6 @@ export const RemoveSongIcon = ({ onClick }) => (
   <svg
     onClick={onClick}
     className="icon"
-    id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 77.68 115.7"
   >
@@ -68,10 +67,10 @@ export const RemoveSongIcon = ({ onClick }) => (
   </svg>
 );
 
-export const BlockSongIcon = () => (
+export const BlockSongIcon = ({ onClick }) => (
   <svg
+    onClick={onClick}
     className="icon"
-    id="Layer_16754"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 116.32 116.32"
   >
@@ -126,11 +125,11 @@ export const BlockSongIcon = () => (
   </svg>
 );
 
-export const BlockArtistIcon = () => (
+export const BlockArtistIcon = ({onClick}) => (
   <svg
+    onClick={onClick}
     className="icon"
     xmlns="http://www.w3.org/2000/svg"
-    id="Layer_1"
     viewBox="35.98 30.65 96.44 104.46"
   >
     <title>Block artist from future playlists</title>
@@ -169,7 +168,6 @@ export const RemoveGenreIcon = ({ onClick }) => (
   <svg
     onClick={onClick}
     className="icon"
-    id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 77.68 115.7"
   >
@@ -235,14 +233,15 @@ export const RemoveGenreIcon = ({ onClick }) => (
   </svg>
 );
 
-export const Undo = () => (
+export const Undo = ({onClick, title, className}) => (
   <svg
-    className="icon"
-    id="Layer_1"
+    onClick={onClick}
+    className={`icon ${className}`}
     xmlns="http://www.w3.org/2000/svg"
     // xmlns:xlink="http://www.w3.org/1999/xlink"
     viewBox="0 0 141.1 143.66"
   >
+    <title>{title}</title>
     <defs>
       <style>
         {`
@@ -255,7 +254,6 @@ export const Undo = () => (
       }
 
       .undo-2 {
-        stroke: #67c4a6;
         stroke-miterlimit: 10;
         stroke-width: 15px;
       }
@@ -264,13 +262,17 @@ export const Undo = () => (
         clip-path: url(#clippath);
       }
 
-      .undo-5 {
-        fill: #67c4a6;
-      }
+      
         `}
       </style>
       <clipPath id="clippath">
-        <rect className="undo-1" x="61.71" y="7.61" width="79.39" height="76.46" />
+        <rect
+          className="undo-1"
+          x="61.71"
+          y="7.61"
+          width="79.39"
+          height="76.46"
+        />
       </clipPath>
       <clipPath id="clippath-1">
         <rect className="undo-1" y="74.35" width="139.29" height="69.31" />
@@ -321,7 +323,6 @@ export const Clock = () => (
   <svg
     className="no-hover"
     version="1.1"
-    id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
     x="0px"
     y="0px"
