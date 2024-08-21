@@ -17,7 +17,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SpotifyApi {
-    public static final String BASE_URL = "https://accounts.spotify.com";
+    public static final String BASE_ACCOUNT_URL = "https://accounts.spotify.com";
+    public static final String BASE_URL = "https://api.spotify.com";
 
     private final RestTemplate restTemplate;
     private String accessToken;
@@ -76,7 +77,7 @@ public class SpotifyApi {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
-        TokenResponse tokenResponse = restTemplate.postForObject(BASE_URL + "/api/token", request,
+        TokenResponse tokenResponse = restTemplate.postForObject(BASE_ACCOUNT_URL + "/api/token", request,
                 TokenResponse.class);
         Optional.ofNullable(tokenResponse).ifPresent(t -> {
             accessToken = t.access_token();
