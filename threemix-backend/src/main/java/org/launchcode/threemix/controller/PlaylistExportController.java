@@ -74,7 +74,7 @@ public class PlaylistExportController {
                                @RequestParam String description,
                                @RequestParam List<String> trackIds,
                                HttpSession session) {
-        System.out.println("Export playlist " + name);
+        System.out.println("Exporting playlist: " + name);
         String spotifyId = userService.getUserId(accessToken, session);
         User user = userService.findUserBySpotifyId(spotifyId);
         SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
@@ -85,7 +85,7 @@ public class PlaylistExportController {
         String playlistId = api.createPlaylist(spotifyId, name, description);
         api.addTracksToPlaylist(playlistId, trackUris);
 
-        // Log the playlist export action in UserHistory
-        userService.logUserAction(user, "Exported Playlist: " + name);
+        // Log only the playlist name in UserHistory
+        userService.logUserAction(user, name);
     }
 }

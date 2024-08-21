@@ -27,6 +27,7 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -109,8 +110,8 @@ public class UserService {
     }
 
     // UserHistory and Statistics related methods
-    public void logUserAction(User user, String action) {
-        UserHistory history = new UserHistory(user, action, LocalDateTime.now());
+    public void logUserAction(User user, String playlistName) {
+        UserHistory history = new UserHistory(user, playlistName, LocalDateTime.now());
         userHistoryRepository.save(history);
     }
 
