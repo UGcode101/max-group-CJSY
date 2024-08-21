@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getCurrentUserProfile } from "../api/SpotifyApi";
 import { logout } from "../api/backendApi";
+import { AuthContext } from "../App";
 
-export const ProfileHeader = ({accessToken, setAccessToken}) => {
+export const ProfileHeader = ({setShowProfilePage}) => {
   const [profileInfo, setProfileInfo] = useState();
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const auth = useContext(AuthContext);
   useEffect(() => {
-    if (accessToken) {
-      getCurrentUserProfile(setProfileInfo);
+    if (auth.accessToken) {
+     getCurrentUserProfile(auth, setProfileInfo);
 
     }
-  }, [accessToken, setProfileInfo])
+  }, [setProfileInfo, auth])
 
   const loginLink = (
     <div className="login">
@@ -20,11 +22,17 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
   
   const dropdown = (
     <div className="dropdown" onMouseDown={(e) => e.preventDefault()}>
-      <button>Profile</button>
+      <button onClick={() => {
+        setDropdownVisible(false);
+        setShowProfilePage(true);
+      }}>Profile</button>
       <button
         className="logout-button"
         onClick={() => {
-          logout(setAccessToken);
+          auth.setAccessToken();
+          logout(auth.setAccessToken);
+          setProfileInfo();
+          setShowProfilePage(false);
         }}
       >
         Log out
@@ -33,14 +41,14 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
   );
 
   const profileFragment =
-    profileInfo && profileInfo.images ? (
+    auth.accessToken && profileInfo && (
       <>
         <div className="profile-header">{profileInfo.display_name}</div>
         <div className="profile-pic">
           <img
             className="circle-pic"
             src={
-              profileInfo.images[profileInfo.images.length - 1]?.url ??
+              profileInfo.images?.[profileInfo.images?.length - 1]?.url ??
               `https://ui-avatars.com/api/?name=${profileInfo.display_name}&background=ff00d2&color=fff`
             }
             role="button"
@@ -51,11 +59,11 @@ export const ProfileHeader = ({accessToken, setAccessToken}) => {
         </div>
         {dropdownVisible && dropdown}
       </>
-    ) : null;
+    );
 
   return (
     <>
-      {accessToken ? profileFragment : loginLink}
+      { profileFragment || !auth.accessToken && loginLink}
     </>
   );
 };

@@ -9,6 +9,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Base64;
 import java.util.List;
@@ -16,18 +17,16 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SpotifyApi {
+    public static final String BASE_ACCOUNT_URL = "https://accounts.spotify.com";
+    public static final String BASE_URL = "https://api.spotify.com";
 
     private final RestTemplate restTemplate;
     private String accessToken;
     private String refreshToken;
 
-    public static SpotifyApi fromSession(HttpSession session, String accessToken, RestTemplate restTemplate) {
+    public static SpotifyApi fromSession(HttpSession session) {
         return Optional.ofNullable((SpotifyApi) session.getAttribute("spotifyApi"))
-                .orElseGet(() -> {
-                    SpotifyApi api = new SpotifyApi(restTemplate, accessToken, null);
-                    session.setAttribute("spotifyApi", api);
-                    return api;
-                });
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
     }
 
     public SpotifyApi(RestTemplate restTemplate, String accessToken, String refreshToken) {
@@ -78,7 +77,7 @@ public class SpotifyApi {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
-        TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
+        TokenResponse tokenResponse = restTemplate.postForObject(BASE_ACCOUNT_URL + "/api/token", request,
                 TokenResponse.class);
         Optional.ofNullable(tokenResponse).ifPresent(t -> {
             accessToken = t.access_token();
@@ -88,24 +87,24 @@ public class SpotifyApi {
     }
 
     public SpotifyUser me() {
-        return get("https://api.spotify.com/v1/me", SpotifyUser.class);
+        return get(BASE_URL + "/v1/me", SpotifyUser.class);
     }
 
     public Map<?, ?> recommendations(List<String> chosenGenres) {
         String genres = String.join(",", chosenGenres);
-        return get("https://api.spotify.com/v1/recommendations?seed_genres=" + genres,
+        return get(BASE_URL + "/v1/recommendations?seed_genres=" + genres,
                 Map.class);
     }
 
     public String createPlaylist(String spotifyId, String playlistName, String description) {
         Map<String, String> requestBody =
                 Map.of("name", playlistName, "description", description, "public", "true");
-        return post("https://api.spotify.com/v1/users/" + spotifyId + "/playlists", requestBody, Map.class)
+        return post(BASE_URL + "/v1/users/" + spotifyId + "/playlists", requestBody, Map.class)
                 .get("id").toString();
     }
 
     public void addTracksToPlaylist(String playlistId, List<String> trackUris) {
         Map<String, List<String>> requestBody = Map.of("uris", trackUris);
-        post("https://api.spotify.com/v1/playlists/" + playlistId + "/tracks", requestBody, Map.class);
+        post(BASE_URL + "/v1/playlists/" + playlistId + "/tracks", requestBody, Map.class);
     }
 }

@@ -53,8 +53,8 @@ public class UserService {
     private RestTemplate restTemplate;
 
     // User related methods
-    public void createIfNewUser(String accessToken, HttpSession session) {
-        String userId = getUserId(accessToken, session);
+    public void createIfNewUser(HttpSession session) {
+        String userId = getUserId(session);
         Optional.ofNullable(userRepository.findBySpotifyId(userId))
                 .orElseGet(() -> userRepository.save(new User(userId)));
     }
@@ -93,14 +93,14 @@ public class UserService {
         blockedSongRepository.deleteById(id);
     }
 
-    public String getUserId(String accessToken, HttpSession session) {
+    public String getUserId(HttpSession session) {
         return ((SpotifyUser) Optional.ofNullable(session.getAttribute("userInfo"))
-                .orElseGet(() -> fetchUserInfo(accessToken, session)))
+                .orElseGet(() -> fetchUserInfo(session)))
                 .id();
     }
 
-    private SpotifyUser fetchUserInfo(String accessToken, HttpSession session) {
-        SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
+    private SpotifyUser fetchUserInfo(HttpSession session) {
+        SpotifyApi api = SpotifyApi.fromSession(session);
         SpotifyUser user = api.me();
         if (user == null) {
             throw new RuntimeException("Unable to fetch user id");

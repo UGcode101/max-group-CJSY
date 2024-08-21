@@ -55,7 +55,7 @@ public class ThreemixController {
         // Use the generated state
         attributes.addAttribute("state", state);
 
-        return new RedirectView("https://accounts.spotify.com/authorize");
+        return new RedirectView(SpotifyApi.BASE_ACCOUNT_URL + "/authorize");
     }
 
     @GetMapping(value = "/callback")
@@ -78,7 +78,8 @@ public class ThreemixController {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
         try {
-            TokenResponse tokenResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request,
+            TokenResponse tokenResponse = restTemplate.postForObject(SpotifyApi.BASE_ACCOUNT_URL + "/api/token",
+                    request,
                     TokenResponse.class);
             Optional.ofNullable(tokenResponse).ifPresentOrElse(
                     t -> {
@@ -86,7 +87,7 @@ public class ThreemixController {
                         Cookie accessTokenCookie = new Cookie("accessToken", t.access_token());
                         accessTokenCookie.setSecure(true); // Ensure this is set to true in production
                         response.addCookie(accessTokenCookie);
-                        userService.createIfNewUser(t.access_token(), session);
+                        userService.createIfNewUser(session);
                     },
                     () -> {
                         try {
@@ -108,7 +109,7 @@ public class ThreemixController {
 
     @PostMapping(value = "/refresh")
     public void refresh(HttpServletResponse response, HttpSession session) throws IOException {
-        SpotifyApi api = SpotifyApi.fromSession(session, null, restTemplate);
+        SpotifyApi api = SpotifyApi.fromSession(session);
         TokenResponse tokenResponse = api.refresh();
         Cookie accessTokenCookie = new Cookie("accessToken", tokenResponse.access_token());
         accessTokenCookie.setSecure(true);

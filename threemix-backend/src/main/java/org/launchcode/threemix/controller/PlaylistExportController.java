@@ -24,12 +24,11 @@ public class PlaylistExportController {
     private UserService userService;
 
     @PostMapping(value = "/generateTrackList", produces = "application/json")
-    public Map<String, Object> generateTrackList(@CookieValue("accessToken") String accessToken,
-                                                 @RequestParam List<String> chosenGenres,
+    public Map<String, Object> generateTrackList(@RequestParam List<String> chosenGenres,
                                                  HttpSession session) {
-        String spotifyId = userService.getUserId(accessToken, session);
+        String spotifyId = userService.getUserId(session);
         User user = userService.findUserBySpotifyId(spotifyId);
-        SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
+        SpotifyApi api = SpotifyApi.fromSession(session);
         Map<String, Object> trackRecommendations = (Map<String, Object>) api.recommendations(chosenGenres);
 
         List<String> blockedArtists = userService.findBlockedArtistByUser(user)
@@ -69,15 +68,14 @@ public class PlaylistExportController {
     }
 
     @PostMapping(value = "/exportPlaylist")
-    public void exportPlaylist(@CookieValue("accessToken") String accessToken,
-                               @RequestParam String name,
+    public void exportPlaylist(@RequestParam String name,
                                @RequestParam String description,
                                @RequestParam List<String> trackIds,
                                HttpSession session) {
         System.out.println("Exporting playlist: " + name);
-        String spotifyId = userService.getUserId(accessToken, session);
+        String spotifyId = userService.getUserId(session);
         User user = userService.findUserBySpotifyId(spotifyId);
-        SpotifyApi api = SpotifyApi.fromSession(session, accessToken, restTemplate);
+        SpotifyApi api = SpotifyApi.fromSession(session);
 
         List<String> trackUris = trackIds.stream()
                 .map(id -> "spotify:track:" + id)
