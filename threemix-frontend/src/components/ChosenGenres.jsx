@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import { RemoveGenreIcon } from "./Icons";
+import { Fragment } from "react";
+
 export const ChosenGenres = ({ setChosenGenres, chosenGenres }) => {
   const htmlifyGenre = (genre, i) => (
-    <>
+    <Fragment key={genre}>
       <span className={`circle number${i + 1}`}>{i + 1} </span>
       <span className="chosen-genre">{genre} </span>
       <div className="x">
@@ -16,7 +18,7 @@ export const ChosenGenres = ({ setChosenGenres, chosenGenres }) => {
           <RemoveGenreIcon />
         </button>
       </div>
-    </>
+    </Fragment>
   );
 
   return (

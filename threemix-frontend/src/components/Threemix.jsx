@@ -4,17 +4,18 @@ import { Tracklist } from "./Tracklist";
 import { useContext, useEffect, useState } from "react";
 import { Generate } from "./Generate";
 import { AuthContext } from "../App";
+import { TracklistPageId } from "../pages";
 
-export const Threemix = ({ accessToken, setShowTracklistPage }) => {
+export const Threemix = ({ setCurrentPageId }) => {
   const [chosenGenres, setChosenGenres] = useState([]);
   const [tracklist, setTracklist] = useState();
   const auth = useContext(AuthContext);
   useEffect(() => {
-    setShowTracklistPage(!!tracklist);
-  }, [tracklist, setShowTracklistPage])
+      setCurrentPageId(!!tracklist ? TracklistPageId : undefined);
+  }, [tracklist, setCurrentPageId]);
   const tracklistScreen = (
     <>
-      <Tracklist tracklist={tracklist} />
+      <Tracklist tracklist={tracklist} chosenGenres={chosenGenres} setCurrentPageId={setCurrentPageId} />
     </>
   );
   const chooseGenresScreen = (
@@ -31,9 +32,5 @@ export const Threemix = ({ accessToken, setShowTracklistPage }) => {
     <>{(!!tracklist && tracklistScreen) || chooseGenresScreen}</>
   );
 
-  return (
-    <>
-      {auth.accessToken && loggedInFeatures}
-    </>
-  );
+  return <>{auth.accessToken && loggedInFeatures}</>;
 };

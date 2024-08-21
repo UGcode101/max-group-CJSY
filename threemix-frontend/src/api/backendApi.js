@@ -6,7 +6,7 @@ const checkError = (auth, response) => {
   return response;
 };
 
-export const generateTracklist = (auth, genres, setTracklist) =>
+export const generateTracklist3 = (auth, genres, setTracklist) =>
   setTracklist({
     tracks: [
       {
@@ -15,8 +15,11 @@ export const generateTracklist = (auth, genres, setTracklist) =>
         artists: [{ name: "Skank", id: "a2" }],
         album: {
           name: "Radiola",
-          url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
-          //          url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+          images: [
+            {
+              url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
+            },
+          ],
         },
         duration_ms: 67890,
       },
@@ -26,7 +29,11 @@ export const generateTracklist = (auth, genres, setTracklist) =>
         artists: [{ name: "NGHTMRE", id: "a1" }],
         album: {
           name: "Street",
-          url: "	https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
+          images: [
+            {
+              url: "https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
+            },
+          ],
         },
         duration_ms: 56789,
       },
@@ -36,8 +43,11 @@ export const generateTracklist = (auth, genres, setTracklist) =>
         artists: [{ name: "Skank", id: "a2" }],
         album: {
           name: "Radiola",
-          url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
-          //          url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+          images: [
+            {
+              url: "https://i.scdn.co/image/ab67616d00004851703adc9ba56d69b5aba64ba1",
+            },
+          ],
         },
         duration_ms: 67890,
       },
@@ -47,7 +57,11 @@ export const generateTracklist = (auth, genres, setTracklist) =>
         artists: [{ name: "NGHTMRE", id: "a1" }],
         album: {
           name: "Street",
-          url: "	https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
+          images: [
+            {
+              url: "https://i.scdn.co/image/ab67616d000048513e1e6191bce005c6f2a17557",
+            },
+          ],
         },
         duration_ms: 56789,
       },
@@ -55,7 +69,7 @@ export const generateTracklist = (auth, genres, setTracklist) =>
   });
 
 
-export const generateTracklist2 = (auth, genres, setTracklist) =>
+export const generateTracklist = (auth, genres, setTracklist) =>
   fetch(
     `http://localhost:8080/generateTrackList?chosenGenres=${genres.join(",")}`,
     {
