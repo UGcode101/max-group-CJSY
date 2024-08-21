@@ -39,6 +39,9 @@ public class PlaylistExportController {
 
         filterRecommendations(trackRecommendations, blockedArtists, blockedSongs);
 
+        // Log genre usage in UserHistory and GenreStats
+        userService.logGenreUsage(user, chosenGenres);
+
         return trackRecommendations;
     }
 
@@ -69,7 +72,7 @@ public class PlaylistExportController {
                                @RequestParam String description,
                                @RequestParam List<String> trackIds,
                                HttpSession session) {
-        System.out.println("Export playlist " + name);
+        System.out.println("Exporting playlist: " + name);
         String spotifyId = userService.getUserId(session);
         User user = userService.findUserBySpotifyId(spotifyId);
         SpotifyApi api = SpotifyApi.fromSession(session);
@@ -79,5 +82,8 @@ public class PlaylistExportController {
                 .toList();
         String playlistId = api.createPlaylist(spotifyId, name, description);
         api.addTracksToPlaylist(playlistId, trackUris);
+
+        // Log only the playlist name in UserHistory
+        userService.logUserAction(user, name);
     }
 }
