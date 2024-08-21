@@ -1,13 +1,24 @@
 import { blockSong, createPlaylist } from "../api/backendApi";
 import { useContext, useMemo, useState } from "react";
 import { AuthContext } from "../App";
-import { BlockArtistIcon, BlockSongIcon, Clock, RemoveSongIcon, Undo } from "./Icons";
+import {
+  BlockArtistIcon,
+  BlockSongIcon,
+  Clock,
+  RemoveSongIcon,
+  Undo,
+} from "./Icons";
+import { SuccessPageId } from "../pages";
 
-  const undo = (title, className, id, list, setList) => (
-    <Undo className={className} title={title} onClick={() => setList(list.filter((e) => e !== id))} />
-  );
+const undo = (title, className, id, list, setList) => (
+  <Undo
+    className={className}
+    title={title}
+    onClick={() => setList(list.filter((e) => e !== id))}
+  />
+);
 
-export const Tracklist = ({ tracklist }) => {
+export const Tracklist = ({ tracklist, chosenGenres, setCurrentPageId }) => {
   const [name, setName] = useState("New playlist");
   const [removedSongs, setRemovedSongs] = useState([]);
   const [blockedSongs, setBlockedSongs] = useState([]);
@@ -16,52 +27,84 @@ export const Tracklist = ({ tracklist }) => {
   const auth = useContext(AuthContext);
   const tracks = tracklist?.tracks;
 
-  const trackList = useMemo(() => tracks?.map((track, i) => {
-    const duration = new Date(track.duration_ms);
-    return (
-      <tr key={track.id}>
-        <td>{i + 1}</td>
-        <td>
-          <img src={track.album?.url}></img>
-        </td>
-        <td className="track-artist-name">
-          <div className="track-name">{track.name}</div>{" "}
-          <div className="artist-name">{track.artists?.map((a) => a.name)}</div>
-        </td>
-        <td className="album-name">{track.album?.name}</td>
-        <td className="duration">
-          {duration.getMinutes()}:
-          {String(duration.getSeconds()).padStart(2, "0")}
-        </td>
-        <td>
-          {/* <button onClick={() => blockSong(auth, track.id)}>block song</button> */}
-          {removedSongs.includes(track.id) ? (
-            undo("Undo remove song", "undo-remove-song", track.id, removedSongs, setRemovedSongs)
-          ) : (
-            <RemoveSongIcon
-              onClick={() => setRemovedSongs([...removedSongs, track.id])}
-            />
-          )}
-          {blockedSongs.includes(track.id) ? (
-            undo("Undo block song", "undo-block-song", track.id, blockedSongs, setBlockedSongs)
-          ) : (
-            <BlockSongIcon
-              onClick={() => setBlockedSongs([...blockedSongs, track.id])}
-            />
-          )}
-          {blockedArtists.includes(track.artists?.[0].id) ? (
-            undo("Undo block artist", "undo-block-artist", track.artists?.[0].id, blockedArtists, setBlockedArtists)
-          ) : (
-            <BlockArtistIcon
-              onClick={() =>
-                setBlockedArtists([...blockedArtists, track.artists?.[0].id])
-              }
-            />
-          )}
-        </td>
-      </tr>
-    );
-  }), [removedSongs, blockedSongs, blockedArtists, tracks]);
+  const bull = <>&bull;</>
+  const trackList = useMemo(
+    () =>
+      tracks?.map((track, i) => {
+        const duration = new Date(track.duration_ms);
+        return (
+          <tr key={track.id}>
+            <td>{i + 1}</td>
+            <td>
+              <img
+                src={track.album?.images?.[track.album?.images.length - 1].url}
+              ></img>
+            </td>
+            <td className="track-artist-name">
+              <div className="track-name">{track.name}</div>{" "}
+              <div className="artist-name">
+                <span className="explicit">{track.explicit ? "E " : ""}</span>
+                {track.artists?.map((a) => a.name).join(" - ")}
+              </div>
+            </td>
+            <td className="album-name">{track.album?.name}</td>
+            <td className="duration">
+              {duration.getMinutes()}:
+              {String(duration.getSeconds()).padStart(2, "0")}
+            </td>
+            <td>
+              {/* <button onClick={() => blockSong(auth, track.id)}>block song</button> */}
+              {removedSongs.includes(track.id) ? (
+                undo(
+                  "Undo remove song",
+                  "undo-remove-song",
+                  track.id,
+                  removedSongs,
+                  setRemovedSongs
+                )
+              ) : (
+                <RemoveSongIcon
+                  onClick={() => setRemovedSongs([...removedSongs, track.id])}
+                />
+              )}
+              {blockedSongs.includes(track.id) ? (
+                undo(
+                  "Undo block song",
+                  "undo-block-song",
+                  track.id,
+                  blockedSongs,
+                  setBlockedSongs
+                )
+              ) : (
+                <BlockSongIcon
+                  onClick={() => setBlockedSongs([...blockedSongs, track.id])}
+                />
+              )}
+              {blockedArtists.includes(track.artists?.[0].id) ? (
+                undo(
+                  "Undo block artist",
+                  "undo-block-artist",
+                  track.artists?.[0].id,
+                  blockedArtists,
+                  setBlockedArtists
+                )
+              ) : (
+                <BlockArtistIcon
+                  onClick={() =>
+                    setBlockedArtists([
+                      ...blockedArtists,
+                      track.artists?.[0].id,
+                    ])
+                  }
+                />
+              )}
+            </td>
+          </tr>
+        );
+      }),
+    [removedSongs, blockedSongs, blockedArtists, tracks]
+  );
+  console.log(tracklist);
   return (
     <>
       <div className="tracklist">
@@ -72,7 +115,9 @@ export const Tracklist = ({ tracklist }) => {
               <th></th>
               <th>Title</th>
               <th>Album</th>
-              <th className="duration-header"><Clock/></th>
+              <th className="duration-header">
+                <Clock />
+              </th>
             </tr>
           </thead>
           <tbody>{trackList}</tbody>
@@ -87,17 +132,20 @@ export const Tracklist = ({ tracklist }) => {
       <div className="export-button">
         <button
           disabled={isSaving}
-          onClick={() =>
-          {
+          onClick={() => {
             setIsSaving(true);
-              return createPlaylist(
-                auth,
-                name,
-                "Generated by Threemix",
-                tracks?.map((track) => track.id)
-              ).then(() => setIsSaving(false));
-            }
-          }
+            createPlaylist(
+              auth,
+              name,
+              `Generated by Threemix (${chosenGenres.join(", ")})`,
+              tracks
+                ?.map((track) => track.id)
+                .filter((t) => !removedSongs.includes(t))
+            )
+              .then(() => setIsSaving(false))
+              .then(() => setCurrentPageId(SuccessPageId));
+            // blockEntities(blockedSongs, blockedArtists);
+          }}
         >
           Export to Spotify
         </button>

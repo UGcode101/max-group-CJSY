@@ -5,61 +5,80 @@ import { Threemix } from './components/Threemix.jsx'
 import { getToken } from './api/SpotifyApi.js';
 import { ProfilePage } from './components/ProfilePage.jsx';
 import { Spotify } from './components/Spotify.jsx';
+import { ProfilePageId, SuccessPageId, TracklistPageId } from './pages.js';
 
 export const AuthContext = createContext();
 
 function App() {
   const [accessToken, setAccessToken] = useState(getToken());
-  const [showProfilePage, setShowProfilePage] = useState(false);
-  const [showTracklistPage, setShowTracklistPage] = useState(false);
-
+  const [currentPageId, setCurrentPageId] = useState();
+ 
   const threemix = (
     <>
       <Threemix
-        accessToken={accessToken}
-        setShowTracklistPage={setShowTracklistPage}
+        setCurrentPageId={setCurrentPageId}
       />
     </>
   );
 
   const profilePage = (
     <>
-      <ProfilePage setShowProfilePage={setShowProfilePage}/>
+      <ProfilePage setShowProfilePage={() => setCurrentPageId()} />
     </>
-  )
+  );
 
-  const isSmall = showProfilePage || showTracklistPage;
+  const successPage = (
+    <>
+      Success!
+    </>
+  );
+
+  const isSmall = [ProfilePageId, SuccessPageId].includes(currentPageId);
   const smallClass = isSmall ? "small" : ""
   const tagline = isSmall
     ? "for "
     : "A multi-genre playlist generator created for ";
 
-  return (
-    <>
-      <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-        <div className="grid-container">
-          <div className={`app-name-container ${smallClass}`}>
-            <div className="app-name">
-              <h1>THREEMIX</h1>
+  const getCurrentPage = () => {
+    switch (currentPageId) {
+      case ProfilePageId:
+        return profilePage;
+      case TracklistPageId:
+        return threemix;
+      case SuccessPageId:
+        return successPage;
+    }
+    return undefined;
+  };
+
+  
+    return (
+      <>
+        <AuthContext.Provider value={{ accessToken, setAccessToken }}>
+          <div className="grid-container">
+            <div className={`app-name-container ${smallClass}`}>
+              <div className="app-name">
+                <h1>THREEMIX</h1>
+              </div>
+              <div className="app-tagline">
+                <h4>
+                  {" "}
+                  {tagline}
+                  <Spotify includeName />
+                </h4>
+              </div>
             </div>
-            <div className="app-tagline">
-              <h4>
-                {" "}
-                {tagline}
-                <Spotify includeName />
-              </h4>
-            </div>
+
+            {accessToken && (getCurrentPage() || threemix)}
+
+            <ProfileHeader
+              setShowProfilePage={() => setCurrentPageId(ProfilePageId)}
+            />
           </div>
+        </AuthContext.Provider>
+      </>
+    );
+  }
 
-          {(showProfilePage && profilePage) || threemix}
+  export default App
 
-          <ProfileHeader
-            setShowProfilePage={setShowProfilePage}
-          />
-        </div>
-      </AuthContext.Provider>
-    </>
-  );
-}
-
-export default App

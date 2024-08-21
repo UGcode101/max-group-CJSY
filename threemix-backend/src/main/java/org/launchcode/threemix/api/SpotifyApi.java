@@ -92,7 +92,7 @@ public class SpotifyApi {
 
     public Map<?, ?> recommendations(List<String> chosenGenres) {
         String genres = String.join(",", chosenGenres);
-        return get(BASE_URL + "/v1/recommendations?seed_genres=" + genres,
+        return get(BASE_URL + "/v1/recommendations?market=US&seed_genres=" + genres,
                 Map.class);
     }
 
