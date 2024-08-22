@@ -1,4 +1,3 @@
-// : Create search component with autocomplete functionality that generates a list of genres from which to choose.
 import PropTypes from "prop-types";
 import { useContext, useEffect, useMemo, useRef } from "react";
 import { getGenreSeeds } from "../api/SpotifyApi";
@@ -38,7 +37,7 @@ export const Search = ({ setChosenGenres, chosenGenres }) => {
   }, [almostAllGenres, searchTerm, chosenGenres.length]);
 
   const searchResults = options.length === 0 && searchTerm.length > 0 ? (
-    <div className="no--search-results">
+    <div className="no-search-results">
       Ope! &quot;{searchTerm}&quot; is not an available genre.
     </div>
   ): (

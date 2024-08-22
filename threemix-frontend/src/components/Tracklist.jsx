@@ -57,7 +57,7 @@ export const Tracklist = ({ tracklist, chosenGenres, setCurrentPageId }) => {
             {String(duration.getSeconds()).padStart(2, "0")}
           </td>
           <td>
-            {/* <button onClick={() => blockSong(auth, track.id)}>block song</button> */}
+            {/* First icon */}
             {removedSongs.includes(track.id) ? (
               undo(
                 "Undo remove song",
@@ -71,6 +71,7 @@ export const Tracklist = ({ tracklist, chosenGenres, setCurrentPageId }) => {
                 onClick={() => setRemovedSongs([...removedSongs, track.id])}
               />
             )}
+            {/* Second icon */}
             {blockedSongs.includes(track.id) ? (
               undo(
                 "Undo block song",
@@ -84,6 +85,7 @@ export const Tracklist = ({ tracklist, chosenGenres, setCurrentPageId }) => {
                 onClick={() => setBlockedSongs([...blockedSongs, track.id])}
               />
             )}
+            {/* Third icon */}
             {blockedArtists.includes(track.artists?.[0].id) ? (
               undo(
                 "Undo block artist",

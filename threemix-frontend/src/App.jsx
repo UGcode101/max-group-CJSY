@@ -32,7 +32,7 @@ function App() {
     </>
   );
 
-  const isSmall = [profilePageId, tracklistPageId, successPageId].includes(
+  const isSmall = accessToken && [profilePageId, tracklistPageId, successPageId].includes(
     currentPageId
   );
   const smallClass = isSmall ? "small" : "";

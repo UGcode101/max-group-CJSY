@@ -9,7 +9,7 @@ export const getToken = () =>
   document.cookie
     .split("; ")
     .find((row) => row.startsWith("accessToken="))
-    ?.split("=")[1];  
+    ?.split("=")[1];
 
 export const generateTracklist3 = (auth, genres, setTracklist) =>
   setTracklist({
@@ -102,6 +102,36 @@ export const blockArtist = (auth, artistId) =>
   })
     .then((r) => checkError(auth, r))
     .catch((e) => console.log(e));
+
+export const unblockSong = (auth, songId) =>
+  fetch(`http://localhost:8080/api/blockedSong/${songId}`, {
+    method: "DELETE",
+    credentials: "include",
+  })
+    .then((r) => checkError(auth, r))
+    .catch((e) => console.log(e));
+
+export const unblockArtist = (auth, artistId) =>
+  fetch(`http://localhost:8080/api/blockedArtist/${artistId}`, {
+    method: "DELETE",
+    credentials: "include",
+  })
+    .then((r) => checkError(auth, r))
+    .catch((e) => console.log(e));
+
+export const getBlockedSongs = (auth, setBlockedSongs) =>
+  fetch("http://localhost:8080/api/blockedSong", { credentials: "include" })
+  .then((r) => checkError(auth, r))
+  .then((r) => r.json())
+  .then(setBlockedSongs)
+  .catch((e) => console.log(e));
+
+export const getBlockedArtists = (auth, setBlockedArtists) =>
+  fetch("http://localhost:8080/api/blockedArtist", { credentials: "include" })
+  .then((r) => checkError(auth, r))
+  .then((r) => r.json())
+  .then(setBlockedArtists)
+  .catch((e) => console.log(e));
 
 export const createPlaylist = (auth, name, description, tracks) =>
   fetch(

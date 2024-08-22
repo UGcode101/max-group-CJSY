@@ -34,15 +34,15 @@ public class BlockedContentController {
     }
 
     @GetMapping("/blockedArtist")
-    public List<BlockedArtist> getBlockedArtists(HttpSession session) {
-        String spotifyId = (String) session.getAttribute("spotifyId");
+    public List<String> getBlockedArtists(HttpSession session) {
+        String spotifyId = userService.getUserId(session);
         User user = userService.findUserBySpotifyId(spotifyId);
-        return userService.findBlockedArtistByUser(user);
+        return user.getBlockedArtists().stream().map(BlockedArtist::getArtistId).toList();
     }
 
     // Deleting a specific blocked artist
     @DeleteMapping("/blockedArtist/{id}")
-    public void unblockArtist(@PathVariable Long id) {
+    public void unblockArtist(@PathVariable String id) {
         userService.deleteBlockedArtistById(id);
     }
 
@@ -62,15 +62,15 @@ public class BlockedContentController {
     }
 
     @GetMapping("/blockedSong")
-    public List<BlockedSong> getBlockedSongs(HttpSession session) {
-        String spotifyId = (String) session.getAttribute("spotifyId");
+    public List<String> getBlockedSongs(HttpSession session) {
+        String spotifyId = userService.getUserId(session);
         User user = userService.findUserBySpotifyId(spotifyId);
-        return userService.findBlockedSongsByUser(user);
+        return user.getBlockedSongs().stream().map(BlockedSong::getSongId).toList();
     }
 
     // Deleting a specific blocked song
     @DeleteMapping("/blockedSong/{id}")
-    public void unblockSong(@PathVariable Long id) {
+    public void unblockSong(@PathVariable String id) {
         userService.deleteBlockedSongById(id);
     }
 }
