@@ -1,8 +1,16 @@
-export const ProfilePage = ({ setShowProfilePage }) => {
+import PropTypes from "prop-types";
+
+export const ProfilePage = ({ setCurrentPageId }) => {
   return (
     <>
-      This is the profile page
-      <button onClick={() => setShowProfilePage(false)}>x</button>
+      <div className="profile-content">
+        This is the profile page
+        <button onClick={() => setCurrentPageId()}>x</button>
+      </div>
     </>
-  )
+  );
+};
+
+ProfilePage.propTypes = {
+  setCurrentPageId: PropTypes.func,
 };

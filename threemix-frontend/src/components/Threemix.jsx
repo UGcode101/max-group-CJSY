@@ -1,21 +1,26 @@
+import PropTypes from "prop-types";
 import { Search } from "./Search";
 import { ChosenGenres } from "./ChosenGenres";
 import { Tracklist } from "./Tracklist";
 import { useContext, useEffect, useState } from "react";
 import { Generate } from "./Generate";
 import { AuthContext } from "../App";
-import { TracklistPageId } from "../pages";
+import { tracklistPageId } from "../pages";
 
 export const Threemix = ({ setCurrentPageId }) => {
   const [chosenGenres, setChosenGenres] = useState([]);
   const [tracklist, setTracklist] = useState();
   const auth = useContext(AuthContext);
   useEffect(() => {
-      setCurrentPageId(!!tracklist ? TracklistPageId : undefined);
+    setCurrentPageId(tracklist ? tracklistPageId : undefined);
   }, [tracklist, setCurrentPageId]);
   const tracklistScreen = (
     <>
-      <Tracklist tracklist={tracklist} chosenGenres={chosenGenres} setCurrentPageId={setCurrentPageId} />
+      <Tracklist
+        tracklist={tracklist}
+        chosenGenres={chosenGenres}
+        setCurrentPageId={setCurrentPageId}
+      />
     </>
   );
   const chooseGenresScreen = (
@@ -33,4 +38,8 @@ export const Threemix = ({ setCurrentPageId }) => {
   );
 
   return <>{auth.accessToken && loggedInFeatures}</>;
+};
+
+Threemix.propTypes = {
+  setCurrentPageId: PropTypes.func,
 };

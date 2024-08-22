@@ -134,14 +134,14 @@ export const getGenreSeeds = (auth, setAllGenres) => {
 
 //Real
 export const getGenreSeeds2 = (auth, setAllGenres) => {
-  const headers = { Authorization: `Bearer ${getToken()}` };
+  const headers = { Authorization: `Bearer ${auth.accessToken}` };
   const url =
     "https://api.spotify.com/v1/recommendations/available-genre-seeds";
   fetch(url, { headers })
     .then((r) => {
       if (r.status === 401) {
         return refresh(auth).then(() => {
-          const newHeaders = { Authorization: `Bearer ${getToken()}` };
+          const newHeaders = { Authorization: `Bearer ${auth.accessToken}` };
           return fetch(url, { headers: newHeaders });
         });
       }
@@ -153,19 +153,14 @@ export const getGenreSeeds2 = (auth, setAllGenres) => {
     .catch((e) => console.log(e));
 }
 
-export const getToken = () => document.cookie
-  .split("; ")
-  .find((row) => row.startsWith("accessToken="))
-  ?.split("=")[1];  
-
 export const getCurrentUserProfile = (auth, setProfileInfo) => {
-  const headers = { Authorization: `Bearer ${getToken()}` } 
+  const headers = { Authorization: `Bearer ${auth.accessToken}` } 
   const url = "https://api.spotify.com/v1/me";
   fetch(url, { headers })
     .then(r => {
       if (r.status === 401) {
         return refresh(auth).then(() => {
-          const newHeaders = { Authorization: `Bearer ${getToken()}` }; 
+          const newHeaders = { Authorization: `Bearer ${auth.accessToken}` }; 
           return fetch(url, { headers: newHeaders });
         });
       }
