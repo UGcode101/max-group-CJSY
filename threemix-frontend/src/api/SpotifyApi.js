@@ -154,13 +154,13 @@ export const getGenreSeeds2 = (auth, setAllGenres) => {
 }
 
 export const getCurrentUserProfile = (auth, setProfileInfo) => {
-  const headers = { Authorization: `Bearer ${auth.accessToken}` } 
+  const headers = { Authorization: `Bearer ${auth.accessToken}` }
   const url = "https://api.spotify.com/v1/me";
   fetch(url, { headers })
     .then(r => {
       if (r.status === 401) {
         return refresh(auth).then(() => {
-          const newHeaders = { Authorization: `Bearer ${auth.accessToken}` }; 
+          const newHeaders = { Authorization: `Bearer ${auth.accessToken}` };
           return fetch(url, { headers: newHeaders });
         });
       }
@@ -169,4 +169,43 @@ export const getCurrentUserProfile = (auth, setProfileInfo) => {
     .then((r) => r.json())
     .then(setProfileInfo)
     .catch((e) => console.log(e));
-} 
+}
+
+export const getArtists = (auth, artistIds, setArtists) => {
+  const headers = { Authorization: `Bearer ${auth.accessToken}` }
+   console.log(artistIds, artistIds.join(","));
+ const url = `https://api.spotify.com/v1/artists?ids=${artistIds.join(",")}`;
+  fetch(url, { headers })
+  .then(r => {
+    if (r.status === 401) {
+      return refresh(auth).then(() => {
+        const newHeaders = { Authorization: `Bearer ${auth.accessToken}` };
+        return fetch(url, { headers: newHeaders });
+      });
+    }
+    return r;
+  })
+  .then((r) => r.json())
+  .then(b => b.artists)
+  .then(setArtists)
+  .catch((e) => console.log(e));
+}
+
+export const getSongs = (auth, songIds, setSongs) => {
+  const headers = { Authorization: `Bearer ${auth.accessToken}` }
+  const url = `https://api.spotify.com/v1/tracks?ids=${songIds.join(",")}`;
+  fetch(url, { headers })
+  .then(r => {
+    if (r.status === 401) {
+      return refresh(auth).then(() => {
+        const newHeaders = { Authorization: `Bearer ${auth.accessToken}` };
+        return fetch(url, { headers: newHeaders });
+      });
+    }
+    return r;
+  })
+  .then((r) => r.json())
+  .then(b => b.tracks)
+  .then(setSongs)
+  .catch((e) => console.log(e));
+}

@@ -231,7 +231,7 @@ tbody tr:hover {
   /* gap: 2px; */
 }
 
-.no--search-results {
+.no-search-results {
   grid-column: 5/9;
   grid-row: 5/6;
 }
@@ -381,4 +381,16 @@ tbody tr:hover {
   grid-column: 7/8;
   grid-row: 6/8;
   width: 110px;
+}
+
+.profile-content {
+  grid-row: 2/3;
+}
+.blocked-artists {
+  grid-row: 3/4;
+  grid-column: 5/6;
+}
+.blocked-songs {
+  grid-row: 3/4;
+  grid-column: 8/9;
 }

@@ -18,8 +18,10 @@ import org.launchcode.threemix.repository.GenreStatsRepository;
 import org.launchcode.threemix.repository.BlockedArtistStatsRepository;
 import org.launchcode.threemix.repository.BlockedSongStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +62,8 @@ public class UserService {
     }
 
     public User findUserBySpotifyId(String spotifyId) {
-        return userRepository.findBySpotifyId(spotifyId);
+        return Optional.ofNullable(userRepository.findBySpotifyId(spotifyId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
     }
 
     public User saveUser(User user) {
@@ -76,8 +79,9 @@ public class UserService {
         return blockedArtistRepository.save(blockedArtist);
     }
 
-    public void deleteBlockedArtistById(Long id) {
-        blockedArtistRepository.deleteById(id);
+    public void deleteBlockedArtistById(String artistId) {
+        BlockedArtist artist = blockedArtistRepository.findBlockedArtistByArtistId(artistId);
+        blockedArtistRepository.deleteById(artist.getId());
     }
 
     // BlockedSong related methods
@@ -89,8 +93,9 @@ public class UserService {
         return blockedSongRepository.save(blockedSong);
     }
 
-    public void deleteBlockedSongById(Long id) {
-        blockedSongRepository.deleteById(id);
+    public void deleteBlockedSongById(String songId) {
+        BlockedSong song = blockedSongRepository.findBlockedSongBySongId(songId);
+        blockedSongRepository.deleteById(song.getId());
     }
 
     public String getUserId(HttpSession session) {
