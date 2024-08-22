@@ -21,4 +21,5 @@ export const Generate = ({ chosenGenres, setTracklist }) => {
 
 Generate.propTypes = {
   chosenGenres: PropTypes.array,
+  setTracklist: PropTypes.func,
 };

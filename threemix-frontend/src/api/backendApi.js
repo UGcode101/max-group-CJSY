@@ -1,10 +1,15 @@
 const checkError = (auth, response) => {
   if (response.status === 401 && auth.accessToken) {
-    console.log(auth.accessToken);
-    auth.setAccessToken(null);
+    auth.setAccessToken(undefined);
   }
   return response;
 };
+
+export const getToken = () =>
+  document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("accessToken="))
+    ?.split("=")[1];  
 
 export const generateTracklist3 = (auth, genres, setTracklist) =>
   setTracklist({
@@ -108,14 +113,17 @@ export const refresh = (auth) =>
     method: "POST",
     credentials: "include",
   })
+    .then(r => {
+      auth.setAccessToken(getToken());
+      return r;
+    })
     .then((r) => checkError(auth, r))
     .catch((e) => console.log(e));
 
-export const logout = (auth, callback) =>
+export const logout = (callback) =>
   fetch("http://localhost:8080/logout", {
     method: "POST",
     credentials: "include",
   })
-    .then((r) => checkError(auth, r))
     .then(callback)
     .catch((e) => console.log(e));

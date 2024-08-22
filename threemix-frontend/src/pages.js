@@ -1,3 +1,3 @@
-export const ProfilePageId = "PROFILE";
-export const TracklistPageId = "TRACKLIST";
-export const SuccessPageId = 'SUCCESS';
+export const profilePageId = "PROFILE";
+export const tracklistPageId = "TRACKLIST";
+export const successPageId = "SUCCESS";
