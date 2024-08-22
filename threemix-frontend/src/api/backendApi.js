@@ -95,6 +95,14 @@ export const blockSong = (auth, songId) =>
     .then((r) => checkError(auth, r))
     .catch((e) => console.log(e));
 
+export const blockArtist = (auth, artistId) =>
+  fetch(`http://localhost:8080/api/blockedArtist?artistId=${artistId}`, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((r) => checkError(auth, r))
+    .catch((e) => console.log(e));
+
 export const createPlaylist = (auth, name, description, tracks) =>
   fetch(
     `http://localhost:8080/exportPlaylist?name=${name}&description=${description}&trackIds=${tracks.join(
@@ -107,6 +115,11 @@ export const createPlaylist = (auth, name, description, tracks) =>
   )
     .then((r) => checkError(auth, r))
     .catch((e) => console.log(e));
+
+export const blockEntities = (auth, songs, artists) => {
+  artists.map(artistId => blockArtist(auth, artistId));
+  songs.map(songId => blockSong(auth, songId));
+}
 
 export const refresh = (auth) =>
   fetch("http://localhost:8080/refresh", {

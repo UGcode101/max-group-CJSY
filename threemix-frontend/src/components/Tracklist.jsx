@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createPlaylist } from "../api/backendApi";
+import { blockEntities, createPlaylist } from "../api/backendApi";
 import { useContext, useMemo, useState } from "react";
 import { AuthContext } from "../App";
 import {
@@ -144,7 +144,7 @@ export const Tracklist = ({ tracklist, chosenGenres, setCurrentPageId }) => {
             )
               .then(() => setIsSaving(false))
               .then(() => setCurrentPageId(successPageId));
-            // blockEntities(blockedSongs, blockedArtists);
+            blockEntities(auth, blockedSongs, blockedArtists);
           }}
         >
           Export to Spotify
