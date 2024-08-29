@@ -1,0 +1,396 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  --color-background: #000119;
+  --stroke-width: calc(1em / 16);
+  --font-size: 8cqw;
+  --font-weight: 700;
+  --letter-spacing: calc(1em / 8);
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* trying font stuff */
+@use postcss-preset-env {
+  stage: 0;
+}
+
+body {
+  background-color: var(--color-background);
+  display: grid;
+  font-family: Poppins, sans-serif;
+  margin: 0;
+  min-block-size: 100vh;
+  place-items: center;
+  padding: 5vmin;
+}
+
+.app-name > h1 {
+  background-clip: text;
+  background-image: linear-gradient(
+    to right,
+    #09f1b8,
+    #00a2ff,
+    #ff00d2,
+    #fed90f
+  );
+  color: var(--color-background);
+  /* font-size: min(var(--font-size), 90pt); */
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  letter-spacing: var(--letter-spacing);
+  padding: calc(--stroke-width / 2);
+  -webkit-text-stroke-color: transparent;
+  -webkit-text-stroke-width: var(--stroke-width);
+  margin: 0;
+}
+
+h4 {
+  margin: 0;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  width: 66px;
+}
+
+.tracklist {
+  font-size: 13px;
+}
+
+svg:hover:not(.no-hover) {
+  transform: scale(1.2);
+}
+
+tbody tr:nth-of-type(even):not(:hover) {
+  background: #21212f;
+}
+table {
+  border-collapse: collapse;
+}
+.tracklist img {
+  display: block;
+  margin: auto;
+}
+
+.tracklist td,
+th {
+  padding: 0.5ch 1ch;
+}
+
+.undo-2 {
+  stroke: #67c4a6;
+}
+
+.undo-5 {
+  fill: #67c4a6;
+}
+
+.undo-block-song .undo-2 {
+  stroke:#00a2ff;
+}
+
+.undo-block-song .undo-5 {
+  fill:#00a2ff; 
+}
+
+.undo-block-artist .undo-2 {
+  stroke:#ff00d2;
+}
+
+.undo-block-artist .undo-5 {
+  fill:#ff00d2; 
+}
+
+tbody tr:hover {
+  background: #808080;
+}
+
+.track-artist-name {
+  align-self: flex-start;
+  width: 20vw;
+}
+
+.track-name {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: -4px;
+}
+
+.album-name {
+  width: 15vw;
+}
+
+.button:hover {
+  transform: scale(1.2);
+}
+
+/* Icons */
+.icon {
+  height: 25px;
+  margin: 5px;
+}
+
+/* GRID STUFF */
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  height: 90vh;
+  gap: 10px;
+}
+
+.app-name-container {
+  display: grid;
+  grid-column: 3 / 11;
+  grid-row: 2/3;
+}
+
+.app-name-container.small {
+  grid-column: 1 / 6;
+  grid-row: 1/2;
+  display: flex;
+  align-self: flex-start;
+}
+
+.app-name-container h1 {
+  font-size: var(--font-size);
+  transition-property: font-size, grid-column;
+  transition-duration: 1s;
+}
+
+.app-name-container.small h1 {
+  font-size: calc(var(--font-size) / 3);
+}
+
+.spotify {
+  height: 30px;
+  vertical-align: middle;
+  margin-bottom: 2.5px;
+}
+
+.app-tagline {
+  margin-top: -2cqw;
+}
+
+.small .app-tagline {
+  margin-top: 1.8cqw;
+  margin-left: 0.25em;
+}
+
+.profile-header {
+  display: flex;
+  grid-column: 11/12;
+  grid-row: 1/2;
+  font-weight: bold;
+  align-self: flex-end;
+  justify-self: last baseline;
+}
+
+.profile-pic {
+  display: grid;
+  grid-column: 12/13;
+  grid-row: 1/2;
+}
+
+.logout-button {
+  display: grid;
+  grid-column: 12/13;
+  grid-row: 1/2;
+}
+
+.dropdown {
+  text-align: left;
+  grid-row: 2/3;
+  grid-column: 12/13;
+}
+
+.dropdown > button {
+  width: 100%;
+}
+
+.search {
+  display: inline;
+  grid-column: 5 / 9;
+  grid-row: 3/4;
+  margin-top: 20px;
+}
+
+.search-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column: 5/9;
+  grid-row: 5/6;
+  justify-items: left;
+  align-items: center;
+  /* gap: 2px; */
+}
+
+.no-search-results {
+  grid-column: 5/9;
+  grid-row: 5/6;
+}
+
+.chosen-genres {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+   grid-template-columns: repeat(5, 1fr);
+  grid-column: 10/13;
+  grid-row: 4/6;
+  justify-items: left;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.chosen-genre {
+  padding-top: 10px;
+  grid-column: 2/5;
+}
+
+.chosen-genres-headline {
+  grid-column: 1/4;
+}
+
+.circle {
+  display: inline-block;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 6px 3px 0px 3px;
+  color: #fff;
+  text-align: center;
+  line-height: 35px;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-right: 15px;
+  font-size: 30px;
+  grid-column: 1/2;
+}
+
+.circle.number1 {
+  background: #09f1b8;
+}
+
+.circle.number2 {
+  background: #00a2ff;
+}
+
+.circle.number3 {
+  background: #ff00d2;
+}
+
+.x {
+  font-weight: bold;
+  background: #000119;
+  border: none;
+  color:#fff;
+  grid-column: 5/6;
+ }
+
+ .genre-line {
+  width: 100%;
+  display: flex;
+  grid-column: 1/2;
+ }
+
+ .x:hover {
+  transform: scale(1.2);
+ }
+
+
+.generate-button {
+  display: grid;
+  grid-column: 6/8;
+  grid-row: 3/4;
+  margin-top: 20px;
+  transform: scale(1.2);
+}
+
+.playlist-name {
+  display: inline;
+  grid-column: 2/5;
+  grid-row: 3/4;
+}
+
+.export-button {
+  grid-column: 2/5;
+  grid-row: 6/7;
+}
+
+.tracklist {
+  text-align: left;
+  grid-column: 2/12;
+  grid-row: 4/5;
+}
+
+.explicit {
+  background-color: #fff;
+  color:#000119;
+  font-weight: bold;
+  padding-left: 3px;
+  padding-right: 3px;
+  margin-right: 7px;
+  border-radius: 3px;
+}
+
+.duration {
+  text-align: right;
+}
+
+.circle-pic {
+  border-radius: 50%;
+  width: 66px;
+}
+
+.login {
+  grid-column: 6/8;
+  grid-row: 3/4;
+  margin-top: 20px;
+}
+
+.profile-content {
+  grid-column: 2/12;
+  grid-row: 5/6;
+}
+
+.success-headline {
+  grid-column: 5/9;
+  grid-row: 3/4;
+  color: #09f1b8;
+}
+
+.success-tagline {
+  grid-column: 5/9;
+  grid-row: 4/5;
+}
+
+.listen-on-button {
+  display:flex-end;
+  grid-column: 6/7;
+  grid-row: 6/8;
+  width: 110px;
+}
+
+.new-playlist-button {
+  display: flex-start;
+  grid-column: 7/8;
+  grid-row: 6/8;
+  width: 110px;
+}
+
+.profile-content {
+  grid-row: 2/3;
+}
+.blocked-artists {
+  grid-row: 3/4;
+  grid-column: 5/6;
+}
+.blocked-songs {
+  grid-row: 3/4;
+  grid-column: 8/9;
+}
